@@ -1,4 +1,0 @@
-wwwroot\css\input.css
-wwwroot\css\site.css
-wwwroot\appsettings.Development.json
-wwwroot\appsettings.json
