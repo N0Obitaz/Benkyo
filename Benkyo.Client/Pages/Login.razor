@@ -1,0 +1,25 @@
+﻿@page "/Login"
+@rendermode InteractiveWebAssembly
+
+<PageTitle>Login</PageTitle>
+
+<h1>Counter</h1>
+
+@if(showMessage)
+{
+    <p role="status">You clicked the button!</p>
+}
+else
+{
+    <p role="status">Please click the button to reveal the message.</p>
+
+}
+
+<button class="bg-red-400" @onclick="RevealMessage">Click to show the Message</button>
+
+@code {
+    private bool showMessage = false;
+    private void RevealMessage() {
+        showMessage = true;
+    }
+}
