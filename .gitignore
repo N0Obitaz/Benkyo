@@ -3,3 +3,9 @@
 [Oo]bj/
 
 .vs
+
+# Build artifacts
+bin/
+obj/
+ref/
+node_modules/

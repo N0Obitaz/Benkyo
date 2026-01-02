@@ -1,23 +1,42 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+<!-- Mobile Menu Button -->
+<button type="button"
+        class="md:hidden fixed top-4 left-4 z-50 p-2 rounded-lg bg-white border border-gray-200 shadow-sm"
+        onclick="document.getElementById('sidebar').classList.toggle('hidden'); document.getElementById('overlay').classList.toggle('hidden')">
+    <svg class="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+    </svg>
+</button>
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-        </div>
+<div class="navbar-brand">
 
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
+    <NavMenu/>
+
 </div>
 
-<div id="blazor-error-ui">
-    An unhandled error has occurred.
-    <a href="" class="reload">Reload</a>
-    <a class="dismiss">🗙</a>
-</div>
+<!-- Sidebar Wrapper -->
+<aside id="sidebar" class="hidden md:flex fixed left-0 top-0 h-screen w-64 bg-white dark:bg-dark-background border-r border-gray-200 dark:border-dark-border flex-col z-40">
+    <Sidebar />
+</aside>
+
+<!-- Overlay for mobile -->
+<div id="overlay" class="hidden md:hidden fixed inset-0 bg-black bg-opacity-50 z-30"
+     onclick="document.getElementById('sidebar').classList.add('hidden'); this.classList.add('hidden')"></div>
+
+<!-- Main Content Area -->
+<main class="md:ml-64 min-h-screen bg-gray-50">
+    @Body
+</main>
+
+
+<script>
+    // Toggle sidebar and overlay together on mobile
+    const menuButton = document.querySelector('button[onclick*="sidebar"]');
+    if (menuButton) {
+        menuButton.onclick = function() {
+            document.getElementById('sidebar').classList.toggle('hidden');
+            document.getElementById('overlay').classList.toggle('hidden');
+        };
+    }
+</script>
