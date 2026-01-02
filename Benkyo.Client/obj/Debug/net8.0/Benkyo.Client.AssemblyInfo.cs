@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Benkyo.Client")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+60c0a5dee989db7c8dbe5c5fe2d1c4b9a4a3ebf1")]
 [assembly: System.Reflection.AssemblyProductAttribute("Benkyo.Client")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Benkyo.Client")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

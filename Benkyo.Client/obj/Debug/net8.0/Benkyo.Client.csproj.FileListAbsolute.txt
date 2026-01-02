@@ -1022,9 +1022,6 @@ C:\Users\CBB\source\repos\Benkyo\Benkyo.Client\obj\Debug\net8.0\compressed\rij00
 C:\Users\CBB\source\repos\Benkyo\Benkyo.Client\obj\Debug\net8.0\compressed\irser076dd-tptq2av103.gz
 C:\Users\CBB\source\repos\Benkyo\Benkyo.Client\obj\Debug\net8.0\compressed\pz4rb56c0y-lfu7j35m59.gz
 C:\Users\CBB\source\repos\Benkyo\Benkyo.Client\obj\Debug\net8.0\compressed\2gua7og15t-oyz0vx2fzb.gz
-C:\Users\CBB\source\repos\Benkyo\Benkyo.Client\obj\Debug\net8.0\compressed\a6x3tdyjw9-7kwvtaohyj.gz
-C:\Users\CBB\source\repos\Benkyo\Benkyo.Client\obj\Debug\net8.0\compressed\qhzwvwhvjf-jo47yq0pph.gz
-C:\Users\CBB\source\repos\Benkyo\Benkyo.Client\obj\Debug\net8.0\compressed\1aeyxbvy9f-swdfvv4pi9.gz
 C:\Users\CBB\source\repos\Benkyo\Benkyo.Client\obj\Debug\net8.0\staticwebassets.build.json
 C:\Users\CBB\source\repos\Benkyo\Benkyo.Client\obj\Debug\net8.0\staticwebassets.build.json.cache
 C:\Users\CBB\source\repos\Benkyo\Benkyo.Client\obj\Debug\net8.0\staticwebassets.development.json
@@ -1035,3 +1032,7 @@ C:\Users\CBB\source\repos\Benkyo\Benkyo.Client\obj\Debug\net8.0\Benkyo.Client.dl
 C:\Users\CBB\source\repos\Benkyo\Benkyo.Client\obj\Debug\net8.0\refint\Benkyo.Client.dll
 C:\Users\CBB\source\repos\Benkyo\Benkyo.Client\obj\Debug\net8.0\Benkyo.Client.pdb
 C:\Users\CBB\source\repos\Benkyo\Benkyo.Client\obj\Debug\net8.0\ref\Benkyo.Client.dll
+C:\Users\CBB\source\repos\Benkyo\Benkyo.Client\obj\Debug\net8.0\Benkyo.Client.sourcelink.json
+C:\Users\CBB\source\repos\Benkyo\Benkyo.Client\obj\Debug\net8.0\compressed\a6x3tdyjw9-3iyvh8b6fx.gz
+C:\Users\CBB\source\repos\Benkyo\Benkyo.Client\obj\Debug\net8.0\compressed\qhzwvwhvjf-4l7a2hw89z.gz
+C:\Users\CBB\source\repos\Benkyo\Benkyo.Client\obj\Debug\net8.0\compressed\1aeyxbvy9f-bjovjryo5z.gz
