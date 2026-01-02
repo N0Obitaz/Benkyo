@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36811.4 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Benkyo", "Benkyo\Benkyo.csproj", "{C7E6EE5C-9626-45FC-840D-F81B7A90C60D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Benkyo.Client", "Benkyo.Client\Benkyo.Client.csproj", "{9AB13616-5F42-4459-9FB4-6DEC2B5B260E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C7E6EE5C-9626-45FC-840D-F81B7A90C60D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7E6EE5C-9626-45FC-840D-F81B7A90C60D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7E6EE5C-9626-45FC-840D-F81B7A90C60D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7E6EE5C-9626-45FC-840D-F81B7A90C60D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9AB13616-5F42-4459-9FB4-6DEC2B5B260E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AB13616-5F42-4459-9FB4-6DEC2B5B260E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AB13616-5F42-4459-9FB4-6DEC2B5B260E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AB13616-5F42-4459-9FB4-6DEC2B5B260E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2AFDCFE9-3006-4CA8-B392-4899280522C6}
+	EndGlobalSection
+EndGlobal
