@@ -9,3 +9,6 @@ bin/
 obj/
 ref/
 node_modules/
+
+# Firebase Admin SDK
+benkyoConfig.json
