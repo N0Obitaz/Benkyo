@@ -1,7 +1,28 @@
 using Benkyo.Client.Pages;
 using Benkyo.Components;
+using Benkyo.Services;
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
+using Google.Cloud.Firestore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+string credentialPath = @"C:\Users\CBB\source\repos\Benkyo\Benkyo\benkyoConfig.json";
+Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", credentialPath);
+
+//Initialize the Engine for once
+if(FirebaseApp.DefaultInstance == null)
+{
+    FirebaseApp.Create(new AppOptions
+    {
+        Credential = GoogleCredential.GetApplicationDefault()
+    });
+}
+
+builder.Services.AddSingleton(s => FirestoreDb.Create("benkyo-9a049"));
+
+builder.Services.AddScoped<FirebaseService>();
+
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
