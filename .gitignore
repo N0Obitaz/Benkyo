@@ -15,3 +15,5 @@ benkyoConfig.json
 
 # Environment Variables
 appsettings.json
+
+**/appsettings.json
