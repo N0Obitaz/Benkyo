@@ -1,9 +1,13 @@
 using Benkyo.Client.Pages;
+using Benkyo.Client.Services;
 using Benkyo.Components;
 using Benkyo.Services;
 using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Firestore;
+
+using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,21 +17,34 @@ Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", credentialP
 //Initialize the Engine for once
 if(FirebaseApp.DefaultInstance == null)
 {
-    FirebaseApp.Create(new AppOptions
+    var firebaseApp = FirebaseApp.Create(new AppOptions
     {
         Credential = GoogleCredential.GetApplicationDefault()
     });
+    builder.Services.AddSingleton(firebaseApp);
+} else
+{
+    builder.Services.AddSingleton(FirebaseApp.DefaultInstance);
 }
 
-builder.Services.AddSingleton(s => FirestoreDb.Create("benkyo-9a049"));
+    // Register FirestoreDB as a singleton service
+    builder.Services.AddSingleton(s => FirestoreDb.Create("benkyo-9a049"));
+builder.Services.AddSingleton<FirebaseAuthentication>();
+
+builder.Services.AddScoped<AuthService>();
 
 builder.Services.AddScoped<FirebaseService>();
+
+
+builder.Services.AddControllers();
 
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveWebAssemblyComponents();
 
+
+builder.Services.AddHttpClient();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -47,6 +64,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseAntiforgery();
 
+app.MapControllers();
 app.MapRazorComponents<App>()
     .AddInteractiveWebAssemblyRenderMode()
     .AddAdditionalAssemblies(typeof(Benkyo.Client._Imports).Assembly);
