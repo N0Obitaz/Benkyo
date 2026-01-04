@@ -12,3 +12,6 @@ node_modules/
 
 # Firebase Admin SDK
 benkyoConfig.json
+
+# Environment Variables
+appsettings.json

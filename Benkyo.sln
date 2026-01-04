@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36811.4 d17.14
+VisualStudioVersion = 17.14.36811.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Benkyo", "Benkyo\Benkyo.csproj", "{C7E6EE5C-9626-45FC-840D-F81B7A90C60D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Benkyo.Client", "Benkyo.Client\Benkyo.Client.csproj", "{9AB13616-5F42-4459-9FB4-6DEC2B5B260E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{886F0ABD-5D09-445E-A80E-0465B9DD4336}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{9AB13616-5F42-4459-9FB4-6DEC2B5B260E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9AB13616-5F42-4459-9FB4-6DEC2B5B260E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9AB13616-5F42-4459-9FB4-6DEC2B5B260E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{886F0ABD-5D09-445E-A80E-0465B9DD4336}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{886F0ABD-5D09-445E-A80E-0465B9DD4336}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{886F0ABD-5D09-445E-A80E-0465B9DD4336}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{886F0ABD-5D09-445E-A80E-0465B9DD4336}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
