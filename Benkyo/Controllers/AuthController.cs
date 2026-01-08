@@ -36,7 +36,7 @@ namespace Benkyo.Controllers
                 {
                     return BadRequest(new { error = "User Does not Exist." });
                 }
-                Console.WriteLine("User Exists"); 
+               
                 var user = await client.SignInWithEmailAndPasswordAsync(request.Email!, request.Password!);
 
                 // Implement login logic using _firebaseService
