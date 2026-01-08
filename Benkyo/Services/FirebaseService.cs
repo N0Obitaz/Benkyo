@@ -28,6 +28,20 @@ namespace Benkyo.Services
                 return null;
             }
         }
-
+        public async Task<UserRecord> CreateUserAsync(string email, string password)
+        {
+            try
+            {
+                return await FirebaseAuth.DefaultInstance.CreateUserAsync(new UserRecordArgs
+                {
+                    Email = email,
+                    Password = password
+                });
+            } catch
+            {
+                return null;
+            }
+            
+        }
     }
 }

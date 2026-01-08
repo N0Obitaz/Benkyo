@@ -15,21 +15,20 @@ namespace Benkyo.Controllers
     {
         private readonly FirebaseService _firebaseService;
         private readonly FirebaseAuthentication _firebaseAuth;
+        private readonly FirebaseAuthClient client;
 
         public AuthController(FirebaseService firebaseService,FirebaseAuthentication firebaseAuth)
         {
             _firebaseAuth = firebaseAuth;
             _firebaseService = firebaseService;
+            client = new FirebaseAuthClient(_firebaseAuth.Config);
         }
 
         [HttpPost("login")] 
-        public async Task<IActionResult> Login([FromBody] LoginModel request)
+        public async Task<IActionResult> Login([FromBody] Shared.Models.User request)
         {
             try
             {
-
-                var client = new FirebaseAuthClient(_firebaseAuth.Config);
-
                 var existing = await _firebaseService.GetUserByEmailAsync(request.Email);
 
                 if(existing == null)
@@ -42,7 +41,7 @@ namespace Benkyo.Controllers
                 // Implement login logic using _firebaseService
                 // For example, verify user credentials and generate a token
                 // Placeholder response
-                var response = new LoginModel
+                var response = new Shared.Models.User
                 {
                     Token = "sample_token",
                     Expiration = DateTime.UtcNow.AddHours(1),
@@ -59,6 +58,29 @@ namespace Benkyo.Controllers
             }
            
         }
+
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] Shared.Models.User request)
+        {
+            try
+            {
+                var existing = await _firebaseService.GetUserByEmailAsync(request.Email);
+                if(existing != null)
+                {
+                    return BadRequest(new { Error = "User Already Exists." });
+                }
+
+                var userRecord = await _firebaseService.CreateUserAsync(request.Email!, request.Password!);
+
+                return Ok(new { Message = "User registered successfully." });
+
+            } catch (Exception ex)
+            {
+                throw new Exception("An error occurred during registration.", ex);
+            }
+        }
+
+
 
     }
 }
