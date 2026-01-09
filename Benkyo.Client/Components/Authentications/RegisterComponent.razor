@@ -1,5 +1,6 @@
 ﻿@rendermode InteractiveWebAssembly
 @inject AuthService auth
+@inject User user
 
 <h3>Register</h3>
 <div class="space-y-2">
@@ -17,13 +18,20 @@
 	<button @onclick="HandleRegister" class="w-full bg-blue-600 text-gray-700 rounded-md p-2 hover:bg-blue-700">Login</button>
 </div>
 
+@if(user.Uid != null )
+{
+	<p>Your User ID is @user.Uid</p>
+	<p>Registered Email is @user.Email</p>
+}
+<div class="space-y-2">
 
+
+</div>
 @code {
 
-	private User user = new User();
 
 	private async Task HandleRegister()
 	{
-		await auth.RegisterAsync(user);
+		user = await auth.RegisterAsync(user);
 	}
 }
