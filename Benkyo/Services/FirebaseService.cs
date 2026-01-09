@@ -8,7 +8,7 @@ namespace Benkyo.Services
     public class FirebaseService
     {
 
-        private readonly FirestoreDb _db;
+        public readonly FirestoreDb _db;
         private readonly FirebaseApp _firebaseApp;
 
         public FirebaseService(FirestoreDb db, FirebaseApp firebaseApp)
