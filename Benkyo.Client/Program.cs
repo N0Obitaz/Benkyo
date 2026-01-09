@@ -1,5 +1,6 @@
 using Benkyo.Client.Services;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Shared.Models;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
@@ -9,5 +10,7 @@ builder.Services.AddScoped(sp => new HttpClient
 });
 
 builder.Services.AddScoped<AuthService>();
+
+builder.Services.AddTransient<User>();
 
 await builder.Build().RunAsync();
