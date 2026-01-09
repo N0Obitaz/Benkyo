@@ -72,7 +72,19 @@ namespace Benkyo.Controllers
 
                 var userRecord = await _firebaseService.CreateUserAsync(request.Email!, request.Password!);
 
-                return Ok(new { Message = "User registered successfully." });
+
+                var userRef = _firebaseService._db.Collection("users").Document(userRecord.Uid);
+
+                var userData = new Dictionary<string, object>
+                {
+                    {"email", request.Email! },
+                    { "createdAt", Timestamp.GetCurrentTimestamp() },
+                    {"uid", userRecord.Uid! }
+                };
+
+                await userRef.SetAsync(userData);
+
+                return Ok(new Shared.Models.User{ Email = userRecord.Email, Uid = userRecord.Uid});
 
             } catch (Exception ex)
             {
