@@ -8,6 +8,7 @@ using Google.Cloud.Firestore;
 
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Shared.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,6 +36,7 @@ builder.Services.AddScoped<AuthService>();
 
 builder.Services.AddScoped<FirebaseService>();
 
+builder.Services.AddTransient<User>();
 
 builder.Services.AddControllers();
 
