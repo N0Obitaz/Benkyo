@@ -1,0 +1,33 @@
+﻿using System.Net.Http.Json;
+using Shared.Models;
+
+namespace Benkyo.Client.Services
+{
+   
+    public class StudysetService
+    {
+
+        private readonly HttpClient _httpClient;
+
+        public StudysetService(HttpClient httpClient)
+        {
+            _httpClient = httpClient;
+        }
+        // Implement study set related methods here
+        public async Task<bool> CreateStudySetAsync(Studyset studyset)
+        {
+            var response = await _httpClient.PostAsJsonAsync("api/createstudyset", studyset);
+
+
+            if(response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("Study Set Created Successfully");
+            }
+            return response.IsSuccessStatusCode;
+            
+
+                
+        }
+        
+    }
+}

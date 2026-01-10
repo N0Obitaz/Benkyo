@@ -1,0 +1,47 @@
+﻿using Benkyo.Services;
+using Microsoft.AspNetCore.Mvc;
+using Shared.Models;
+
+namespace Benkyo.Controllers
+{
+    [ApiController]
+    [Route("api/[controller]")]
+    public class StudysetController : ControllerBase
+    {
+        private readonly FirebaseService _firebaseService;
+
+        
+        public StudysetController(FirebaseService firebaseService)
+        {
+            _firebaseService = firebaseService;
+        }
+
+        [HttpPost("createstudyset")]
+        private async Task<IActionResult> CreateStudySet([FromBody] Studyset request)
+        {
+            try
+            {
+                var existing = await _firebaseService._db.Collection("studysets")
+                .GetSnapshotAsync();
+                if (existing == null)
+                    return BadRequest(new { Message = "Failed to create study set" });
+
+                var studysetRef = _firebaseService._db.Collection("studysets").Document();
+
+                var studysetData = new Dictionary<string, object>
+                {
+                    { "StudySetName", request.StudySetName ?? "Untitled Study Set" },
+                    { "Lessons", request.Lessons ?? new List<Lesson>() }
+                };
+
+                await studysetRef.SetAsync(studysetData);
+                return Ok(new { Message = "Study Set Created" });
+            }catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw new Exception("Error creating study set", ex);
+            }
+            
+        }
+    }
+}
