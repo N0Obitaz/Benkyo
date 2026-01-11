@@ -43,5 +43,28 @@ namespace Benkyo.Controllers
             }
             
         }
+
+        [HttpPost("editstudyset")]
+        private async Task<IActionResult> EditStudySet([FromBody] Studyset request)
+        {
+            try
+            {
+
+                var studysetRef = await _firebaseService._db.Collection("studysets").Document(request.Id ?? "").GetSnapshotAsync();
+
+                var studysetData = new Dictionary<string, object>
+                {
+                    { "StudySetName", request.StudySetName }
+                };
+                await studysetRef.Reference.UpdateAsync(studysetData);
+                return Ok(new { Message = "Study Set Edited" });
+
+            }
+            catch(Exception ex)
+            {
+                throw new Exception($"Error editing study set{ ex.Message}");
+            }
+
+        }
     }
 }
