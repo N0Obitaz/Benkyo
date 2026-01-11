@@ -15,7 +15,7 @@ namespace Benkyo.Controllers
             _firebaseService = firebaseService;
         }
 
-        [HttpPost("createlesson")]
+        [HttpPost("lesson/create")]
         private async Task<IActionResult> CreateLesson([FromBody] Lesson lessonRequest)
         {
             try
