@@ -32,11 +32,13 @@ if(FirebaseApp.DefaultInstance == null)
     builder.Services.AddSingleton(s => FirestoreDb.Create("benkyo-9a049"));
 builder.Services.AddSingleton<FirebaseAuthentication>();
 
-builder.Services.AddScoped<AuthService>();
+
 
 builder.Services.AddScoped<FirebaseService>();
 
 builder.Services.AddTransient<User>();
+builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<StudysetService>();
 
 builder.Services.AddControllers();
 
