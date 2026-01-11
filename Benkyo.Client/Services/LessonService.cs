@@ -1,0 +1,22 @@
+﻿using System.Net.Http.Json;
+using Shared.Models;
+
+namespace Benkyo.Client.Services
+{
+    public class LessonService
+    {
+        private readonly HttpClient _httpClient;
+
+        public LessonService(HttpClient httpClient)         
+        {
+            _httpClient = httpClient;
+        }
+
+        public async Task<bool> CreateLessonAsync(Lesson lesson)
+        {
+            var response = await _httpClient.PostAsJsonAsync("api/lesson/create", lesson);
+
+            return response.IsSuccessStatusCode;
+        }
+    }
+}
