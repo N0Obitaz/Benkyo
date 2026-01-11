@@ -21,7 +21,7 @@ namespace Benkyo.Controllers
             try
             {
                 var existing = await _firebaseService._db.Collection("lessons").GetSnapshotAsync();
-
+                
                 if (!(existing == null)) return BadRequest(new { Message = "That lesson already exists" });
                 {
                     var lessonRef = _firebaseService._db.Collection("lessons").Document();
