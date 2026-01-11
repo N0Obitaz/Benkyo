@@ -1,4 +1,7 @@
-﻿namespace Benkyo.Client.Services
+﻿using System.Net.Http.Json;
+using Shared.Models;
+
+namespace Benkyo.Client.Services
 {
     public class FlashcardService
     {
@@ -7,6 +10,13 @@
         public FlashcardService(HttpClient httpClient)
         {
             _httpClient = httpClient;
+        }
+
+        public async Task<bool> CreateFlashcardAsync(Flashcard flashcard)
+        {
+            var response = await _httpClient.PostAsJsonAsync("api/flashcard/create", flashcard);
+
+            return response.IsSuccessStatusCode;
         }
     }
 }

@@ -40,6 +40,8 @@ builder.Services.AddTransient<User>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<StudysetService>();
 
+builder.Services.AddScoped<FlashcardService>();
+
 builder.Services.AddControllers();
 
 

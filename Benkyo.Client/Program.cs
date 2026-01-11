@@ -11,6 +11,8 @@ builder.Services.AddScoped(sp => new HttpClient
 
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<StudysetService>();
+builder.Services.AddScoped<FlashcardService>();
 builder.Services.AddTransient<User>();
+
 
 await builder.Build().RunAsync();
