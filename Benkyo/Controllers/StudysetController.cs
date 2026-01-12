@@ -1,4 +1,5 @@
 ﻿using Benkyo.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Models;
 
@@ -10,13 +11,14 @@ namespace Benkyo.Controllers
     {
         private readonly FirebaseService _firebaseService;
 
-        
+
         public StudysetController(FirebaseService firebaseService)
         {
             _firebaseService = firebaseService;
         }
 
-        [HttpPost("createstudyset")]
+
+        [HttpPost("create")]
         private async Task<IActionResult> CreateStudySet([FromBody] Studyset request)
         {
             try
@@ -36,15 +38,16 @@ namespace Benkyo.Controllers
 
                 await studysetRef.SetAsync(studysetData);
                 return Ok(new { Message = "Study Set Created" });
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 throw new Exception("Error creating study set", ex);
             }
-            
+
         }
 
-        [HttpPost("editstudyset")]
+        [HttpPost("edit")]
         private async Task<IActionResult> EditStudySet([FromBody] Studyset request)
         {
             try
@@ -60,11 +63,54 @@ namespace Benkyo.Controllers
                 return Ok(new { Message = "Study Set Edited" });
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                throw new Exception($"Error editing study set{ ex.Message}");
+                throw new Exception($"Error editing study set{ex.Message}");
             }
 
+        }
+
+        // Delete Studyset
+        [HttpPost("delete")]
+        private async Task<IActionResult> DeleteStudyset([FromBody] Studyset request)
+        {
+            try
+            {
+                var studysetRef = _firebaseService._db.Collection("studysets").Document(request.Id ?? "");
+
+                await studysetRef.DeleteAsync();
+                return Ok(new { Message = "Study Set Deleted" });
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error deleting study set: {ex.Message}");
+            }
+        }
+
+        // Fetch all Studysets based on User Id
+        [Authorize]
+        [HttpGet("all/{userId}")]
+        private async Task<IActionResult> GetAllStudysets(string userId)
+        {
+            try
+            {
+                var studysetsRef = _firebaseService._db.Collection("studysets");
+                var query = studysetsRef.WhereEqualTo("UserId", userId);
+                var snapshot = await query.GetSnapshotAsync();
+                var studysets = new List<Studyset>();
+                foreach (var document in snapshot.Documents)
+                {
+                    var studyset = document.ConvertTo<Studyset>();
+                    studyset.Id = document.Id;
+                    studysets.Add(studyset);
+                }
+                return Ok(studysets);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error fetching study sets: {ex.Message}");
+            }
         }
     }
 }

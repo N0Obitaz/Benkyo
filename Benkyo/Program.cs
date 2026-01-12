@@ -39,8 +39,8 @@ builder.Services.AddScoped<FirebaseService>();
 builder.Services.AddTransient<User>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<StudysetService>();
-
 builder.Services.AddScoped<FlashcardService>();
+builder.Services.AddScoped<LessonService>();
 
 builder.Services.AddControllers();
 

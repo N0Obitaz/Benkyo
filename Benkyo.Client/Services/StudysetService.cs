@@ -16,7 +16,7 @@ namespace Benkyo.Client.Services
         // Implement study set related methods here
         public async Task<bool> CreateStudySetAsync(Studyset studyset)
         {
-            var response = await _httpClient.PostAsJsonAsync("api/createstudyset", studyset);
+            var response = await _httpClient.PostAsJsonAsync("api/studyset/create", studyset);
 
 
             if(response.IsSuccessStatusCode)
@@ -28,6 +28,18 @@ namespace Benkyo.Client.Services
 
                 
         }
-        
+
+        public async Task<bool> EditStudySetAsync(Studyset studyset)
+        {
+            var response = await _httpClient.PostAsJsonAsync("api/studyset/edit", studyset);
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> DeleteStudySetAsync(string studysetId)
+        {
+            var response = await _httpClient.PostAsJsonAsync("api/studyset/delete", new { Id = studysetId });
+            return response.IsSuccessStatusCode;
+        }
+
     }
 }

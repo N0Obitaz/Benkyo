@@ -16,6 +16,7 @@ namespace Benkyo.Controllers
             _firebaseService = firebaseService;
         }
 
+
         [HttpPost("flashcard/create")]
         private async Task<IActionResult> CreateFlashcard([FromBody] Flashcard flashcardRequest)
         {
