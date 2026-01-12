@@ -17,7 +17,7 @@ namespace Benkyo.Controllers
         }
 
 
-        [HttpPost("studyset/create")]
+        [HttpPost("create")]
         private async Task<IActionResult> CreateStudySet([FromBody] Studyset request)
         {
             try
@@ -45,7 +45,7 @@ namespace Benkyo.Controllers
             
         }
 
-        [HttpPost("studyset/edit")]
+        [HttpPost("edit")]
         private async Task<IActionResult> EditStudySet([FromBody] Studyset request)
         {
             try
@@ -69,7 +69,7 @@ namespace Benkyo.Controllers
         }
 
         // Delete Studyset
-        [HttpPost("studyset/delete")]
+        [HttpPost("delete")]
         private async Task<IActionResult> DeleteStudyset([FromBody] Studyset request)
         {
             try
