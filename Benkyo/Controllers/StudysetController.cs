@@ -16,7 +16,8 @@ namespace Benkyo.Controllers
             _firebaseService = firebaseService;
         }
 
-        [HttpPost("createstudyset")]
+
+        [HttpPost("studyset/create")]
         private async Task<IActionResult> CreateStudySet([FromBody] Studyset request)
         {
             try
@@ -44,7 +45,7 @@ namespace Benkyo.Controllers
             
         }
 
-        [HttpPost("editstudyset")]
+        [HttpPost("studyset/edit")]
         private async Task<IActionResult> EditStudySet([FromBody] Studyset request)
         {
             try
@@ -65,6 +66,23 @@ namespace Benkyo.Controllers
                 throw new Exception($"Error editing study set{ ex.Message}");
             }
 
+        }
+
+        // Delete Studyset
+        [HttpPost("studyset/delete")]
+        private async Task<IActionResult> DeleteStudyset([FromBody] Studyset request)
+        {
+            try
+            {
+                var studysetRef = _firebaseService._db.Collection("studysets").Document(request.Id ?? "");
+
+                await studysetRef.DeleteAsync();
+                return Ok(new { Message = "Study Set Deleted" });
+
+            } catch (Exception ex)
+            {
+                throw new Exception($"Error deleting study set: {ex.Message}");
+            }
         }
     }
 }
