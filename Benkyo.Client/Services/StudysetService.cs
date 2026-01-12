@@ -35,7 +35,11 @@ namespace Benkyo.Client.Services
             return response.IsSuccessStatusCode;
         }
 
-        
+        public async Task<bool> DeleteStudySetAsync(string studysetId)
+        {
+            var response = await _httpClient.PostAsJsonAsync("api/studyset/delete", new { Id = studysetId });
+            return response.IsSuccessStatusCode;
+        }
 
     }
 }
