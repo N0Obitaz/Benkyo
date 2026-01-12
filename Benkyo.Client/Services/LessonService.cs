@@ -18,5 +18,13 @@ namespace Benkyo.Client.Services
 
             return response.IsSuccessStatusCode;
         }
+
+        public async Task<bool> EditLessonAsync(Lesson lesson) 
+        {
+            var response = await _httpClient.PostAsJsonAsync("api/lesson/edit", lesson);
+            return response.IsSuccessStatusCode;
+        }
+
+       
     }
 }

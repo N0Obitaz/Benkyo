@@ -13,5 +13,7 @@ namespace Shared.Models
         public string? StudySetName { get; set; }
 
         public List<Lesson>? Lessons{ get; set; }
+
+        public string? UserId { get; set; }
     }
 }

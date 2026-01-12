@@ -12,6 +12,8 @@ namespace Shared.Models
         public string? Question { get; set; }
         public string? Answer { get; set; }
 
+        public string? LessonId { get; set; }
+
 
     }
 }

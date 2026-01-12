@@ -15,7 +15,7 @@ namespace Benkyo.Controllers
             _firebaseService = firebaseService;
         }
 
-        [HttpPost("lesson/create")]
+        [HttpPost("create")]
         private async Task<IActionResult> CreateLesson([FromBody] Lesson lessonRequest)
         {
             try
@@ -42,5 +42,47 @@ namespace Benkyo.Controllers
                 throw new Exception("Error creating lesson", ex);
             }
         }
+
+        // Edit Lesson Here
+        [HttpPost("edit")]
+        private async Task<IActionResult> EditLesson([FromBody] Lesson request)
+        {
+            try
+            {
+                var lessonRef = await _firebaseService._db.Collection("lessons").Document(request.Id ?? "").GetSnapshotAsync();
+
+                var lessonData = new Dictionary<string, object>
+                {
+                    { "lessonName", request.LessonName ?? "Untitled Lesson" }
+                };
+                await lessonRef.Reference.UpdateAsync(lessonData);
+
+                return Ok(new { Message = "Lesson Edited" });
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception("Error editing lesson", ex);
+            }
+        }
+
+        private async Task<IActionResult> DeleteLesson([FromBody] string lessonId)
+        {
+            try
+            {
+                var lessonRef = await _firebaseService._db.Collection("lessons").Document(lessonId).GetSnapshotAsync();
+
+                await lessonRef.Reference.DeleteAsync();
+
+                return Ok(new { Message = "Lesson Deleted" });
+            }
+            catch(Exception ex)
+            {
+                throw new Exception("Error deleting lesson", ex);
+            }
+
+        }
+
+
     }
 }
