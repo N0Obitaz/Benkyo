@@ -66,6 +66,23 @@ namespace Benkyo.Controllers
             }
         }
 
+        private async Task<IActionResult> DeleteLesson([FromBody] string lessonId)
+        {
+            try
+            {
+                var lessonRef = await _firebaseService._db.Collection("lessons").Document(lessonId).GetSnapshotAsync();
+
+                await lessonRef.Reference.DeleteAsync();
+
+                return Ok(new { Message = "Lesson Deleted" });
+            }
+            catch(Exception ex)
+            {
+                throw new Exception("Error deleting lesson", ex);
+            }
+
+        }
+
 
     }
 }
