@@ -5,6 +5,7 @@ using Shared.Models;
 
 namespace Benkyo.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class StudysetController : ControllerBase
@@ -89,7 +90,6 @@ namespace Benkyo.Controllers
         }
 
         // Fetch all Studysets based on User Id
-        [Authorize]
         [HttpGet("all/{userId}")]
         private async Task<IActionResult> GetAllStudysets(string userId)
         {
