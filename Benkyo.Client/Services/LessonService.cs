@@ -25,6 +25,10 @@ namespace Benkyo.Client.Services
             return response.IsSuccessStatusCode;
         }
 
-       
+        public async Task<bool> DeleteLessonAsync(string lessonId)
+        {
+            var response = await _httpClient.PostAsJsonAsync("api/lesson/delete", new { Id = lessonId });
+            return response.IsSuccessStatusCode;
+        }
     }
 }
