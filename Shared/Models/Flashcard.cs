@@ -14,6 +14,8 @@ namespace Shared.Models
 
         public string? LessonId { get; set; }
 
+        public string? FlashcardColor { get; set; }
+
 
     }
 }
