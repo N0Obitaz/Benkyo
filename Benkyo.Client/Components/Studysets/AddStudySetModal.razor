@@ -44,22 +44,23 @@
                     Colour
                 </label>
                 <div class="flex gap-3 flex-wrap">
-                    @foreach (var studyColor in colors.Options)
-                    {
-                        var isSelected = SelectedColorId == studyColor.Id;
+    @foreach (var studyColor in colors.Options)
+    {
+        var isSelected = SelectedColorId == studyColor.Id;
 
-                        <button type="button"
-                                @onclick="() => SelectColor(studyColor.Id)"
-                                class="w-12 h-12 rounded-full transition-all duration-200 hover:scale-110 relative flex items-center justify-center
-                               @studyColor.TailwindClass @(isSelected ? "ring-2 ring-offset-2 ring-gray-400" : "")">
+        <button type="button"
+                @onclick="() => SelectColor(studyColor.Id)"
+                @onclick:stopPropagation
+                class="w-12 h-12 rounded-full transition-all duration-200 hover:scale-110 relative flex items-center justify-center focus:outline-none @(isSelected ? "ring-2 ring-offset-2 ring-gray-400" : "")"
+                style="background-color: @studyColor.Hex;"> @* Use Hex here *@
 
-                            @if (isSelected)
-                            {
-                                <div class="w-3 h-3 bg-white rounded-full shadow-sm"></div>
-                            }
-                        </button>
-                    }
-                </div>
+            @if (isSelected)
+            {
+                <div class="w-3 h-3 bg-white rounded-full shadow-sm"></div>
+            }
+        </button>
+    }
+</div>
             </div>
 
             <!-- Submit Button -->
