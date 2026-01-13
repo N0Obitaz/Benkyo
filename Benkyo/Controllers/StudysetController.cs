@@ -5,7 +5,6 @@ using Shared.Models;
 
 namespace Benkyo.Controllers
 {
-    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class StudysetController : ControllerBase
@@ -22,6 +21,8 @@ namespace Benkyo.Controllers
         [HttpPost("create")]
         private async Task<IActionResult> CreateStudySet([FromBody] Studyset request)
         {
+            Console.WriteLine("You're here na");
+            
             try
             {
                 var existing = await _firebaseService._db.Collection("studysets")

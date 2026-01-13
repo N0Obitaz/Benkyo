@@ -1,5 +1,6 @@
 @rendermode InteractiveWebAssembly
 @inject Studyset studyset
+@inject StudysetService studysetService
 @inject ColorOptions colors
 
 <div class="@(IsOpen ? "fixed" : "hidden") inset-0 z-50 flex items-center justify-center p-5 bg-black/45 backdrop-blur-sm transition-opacity duration-300"
@@ -50,8 +51,10 @@
 
                         <button type="button"
                                 @onclick="() => SelectColor(studyColor.Id)"
-                                class="w-12 h-12 rounded-full transition-all duration-200 hover:scale-110 relative flex items-center justify-center
-                               @studyColor.TailwindClass @(isSelected ? "ring-2 ring-offset-2 ring-gray-400" : "")">
+                                @onclick:stopPropagation
+                                class="w-12 h-12 rounded-full transition-all duration-200 hover:scale-110 relative flex items-center justify-center focus:outline-none @(isSelected ? "ring-2 ring-offset-2 ring-gray-400" : "")"
+                                style="background-color: @studyColor.Hex;">
+                            @* Use Hex here *@
 
                             @if (isSelected)
                             {
@@ -88,6 +91,7 @@
     private void SelectColor(string colorName)
     {
         SelectedColorId = colorName;
+		studyset.StudySetColor = colorName;
     }
 
     private string GetColorClasses(string colorName)
@@ -105,7 +109,7 @@
 
     private async Task SubmitForm()
     {
-       
+       await studysetService.CreateStudySetAsync(studyset);
     }
 
     
