@@ -11,8 +11,11 @@ builder.Services.AddScoped(sp => new HttpClient
 
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<StudysetService>();
+builder.Services.AddScoped<Studyset>();
 builder.Services.AddScoped<FlashcardService>();
 builder.Services.AddScoped<LessonService>();
+builder.Services.AddScoped<ColorOption>();
+builder.Services.AddScoped<ColorOptions>();
 builder.Services.AddTransient<User>();
 
 
