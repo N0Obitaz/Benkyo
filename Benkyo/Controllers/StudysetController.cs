@@ -17,7 +17,7 @@ namespace Benkyo.Controllers
         {
             _firebaseService = firebaseService;
         }
-
+        
 
         [HttpPost("create")]
         private async Task<IActionResult> CreateStudySet([FromBody] Studyset request)

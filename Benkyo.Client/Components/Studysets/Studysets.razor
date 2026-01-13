@@ -1,0 +1,28 @@
+﻿@page "/studysets"
+@inject StudysetService studysetService
+@rendermode InteractiveWebAssembly
+@inject IJSRuntime runtime
+
+<!-- Create Input Fields for creation of studyset-->
+
+<div class="p-6">
+    <h1 class="text-2xl font-bold mb-4">My Decks</h1>
+
+    <button @onclick="OpenAddModal"
+            class="px-6 py-3 bg-study-blue text-black rounded-xl hover:bg-indigo-700 transition-all">
+        + Add New Study Set
+    </button>
+
+    <AddStudySetModal @bind-IsOpen="_isModalOpen" />
+</div>
+
+@code {
+    private bool _isModalOpen  { get; set; }
+
+    private async Task OpenAddModal()
+    {
+        Console.WriteLine("He you clicked this button");
+		await runtime.InvokeVoidAsync("console.log", "He you clicked this button");
+        _isModalOpen = true;
+    }
+}

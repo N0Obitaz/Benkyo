@@ -13,5 +13,7 @@ namespace Shared.Models
         public List<Flashcard>? Flashcards { get; set; }
 
         public string? StudysetId { get; set; }
+
+        public string? LessonColor { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 @rendermode InteractiveWebAssembly
-@* AddStudySetModal.razor *@
-@* This is a Blazor component for the study set creation modal *@
+@inject Studyset studyset
+@inject ColorOptions colors
 
 <div class="@(IsOpen ? "fixed" : "hidden") inset-0 z-50 flex items-center justify-center p-5 bg-black/45 backdrop-blur-sm transition-opacity duration-300"
      @onclick="CloseModal">
@@ -22,17 +22,6 @@
         
         <!-- Modal Body -->
         <div class="px-10 py-8 pb-10">
-            
-            <!-- Folder Select -->
-            <div class="mb-8">
-                <button class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium text-gray-900 hover:bg-gray-100 hover:border-gray-300 transition-all duration-200">
-                    <span class="text-gray-500">In:</span>
-                    <span>@SelectedFolder</span>
-                    <svg class="w-3 h-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 12 8">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1.5L6 6.5L11 1.5"/>
-                    </svg>
-                </button>
-            </div>
 
             <!-- Study Set Name -->
             <div class="mb-7">
@@ -40,7 +29,7 @@
                     Study set name
                 </label>
                 <input type="text" 
-                       @bind="StudySetName"
+                       @bind="studyset.StudySetName"
                        placeholder="E.g. Enzymes"
                        class="w-full px-5 py-4 border-2 border-gray-200 rounded-2xl text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 focus:outline-none transition-all duration-200" />
                 <button class="inline-flex items-center gap-2 mt-2 px-0 py-2 text-sm font-medium text-gray-600 hover:text-gray-800 transition-colors duration-200">
@@ -55,24 +44,21 @@
                     Colour
                 </label>
                 <div class="flex gap-3 flex-wrap">
-                    @foreach (var color in Colors)
+                    @foreach (var studyColor in colors.Options)
                     {
-                        <button @onclick="() => SelectColor(color.Name)"
-                                class="@GetColorClasses(color.Name) w-12 h-12 rounded-full transition-all duration-200 hover:scale-110 focus:outline-none relative"
-                                style="background-color: @color.Hex">
-                            @if (SelectedColor == color.Name)
+                        var isSelected = SelectedColorId == studyColor.Id;
+
+                        <button type="button"
+                                @onclick="() => SelectColor(studyColor.Id)"
+                                class="w-12 h-12 rounded-full transition-all duration-200 hover:scale-110 relative flex items-center justify-center
+                               @studyColor.TailwindClass @(isSelected ? "ring-2 ring-offset-2 ring-gray-400" : "")">
+
+                            @if (isSelected)
                             {
-                                <div class="absolute inset-0 rounded-full border-[3px] border-white/30 shadow-[0_0_0_3px_white,0_0_0_5px_@color.Hex]"></div>
-                                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3.5 h-3.5 border-[2.5px] border-white rounded-full"></div>
+                                <div class="w-3 h-3 bg-white rounded-full shadow-sm"></div>
                             }
                         </button>
                     }
-                    
-                    <!-- Custom Color Button -->
-                    @* <button @onclick="() => SelectColor(\"custom\")"
-                            class="w-12 h-12 rounded-full border-2 border-dashed border-gray-300 bg-white flex items-center justify-center text-2xl text-gray-400 font-light hover:border-gray-400 hover:bg-gray-50 transition-all duration-200 hover:scale-110 @(SelectedColor == "custom" ? "border-gray-500 bg-gray-50" : "")">
-                        +
-                    </button> *@
                 </div>
             </div>
 
@@ -87,40 +73,26 @@
 </div>
 
 @code {
+
     [Parameter]
     public bool IsOpen { get; set; }
-    
+
     [Parameter]
     public EventCallback<bool> IsOpenChanged { get; set; }
+
+
+	private string SelectedColorId { get; set; } = "blue";
+
     
-    [Parameter]
-    public EventCallback<StudySetData> OnSubmit { get; set; }
-
-    private string StudySetName { get; set; } = "";
-    private string SelectedColor { get; set; } = "lime";
-    private string SelectedFolder { get; set; } = "My study sets";
-
-    private List<ColorOption> Colors = new()
-    {
-        new ColorOption { Name = "lime", Hex = "#88DD55" },
-        new ColorOption { Name = "orange", Hex = "#FF8833" },
-        new ColorOption { Name = "yellow", Hex = "#FFBB33" },
-        new ColorOption { Name = "teal", Hex = "#44CCAA" },
-        new ColorOption { Name = "sky", Hex = "#44BBFF" },
-        new ColorOption { Name = "periwinkle", Hex = "#7788FF" },
-        new ColorOption { Name = "purple", Hex = "#BB77FF" },
-        new ColorOption { Name = "pink", Hex = "#FF77BB" },
-        new ColorOption { Name = "coral", Hex = "#FF8899" }
-    };
 
     private void SelectColor(string colorName)
     {
-        SelectedColor = colorName;
+        SelectedColorId = colorName;
     }
 
     private string GetColorClasses(string colorName)
     {
-        return SelectedColor == colorName 
+        return SelectedColorId == colorName
             ? "border-[3px] border-transparent" 
             : "border-[3px] border-transparent";
     }
@@ -133,40 +105,9 @@
 
     private async Task SubmitForm()
     {
-        if (string.IsNullOrWhiteSpace(StudySetName))
-        {
-            // You might want to add validation feedback here
-            return;
-        }
-
-        var data = new StudySetData
-        {
-            Name = StudySetName,
-            Color = SelectedColor,
-            Folder = SelectedFolder
-        };
-
-        await OnSubmit.InvokeAsync(data);
-        
-        // Reset form
-        StudySetName = "";
-        SelectedColor = "lime";
-        await CloseModal();
+       
     }
 
-    private class ColorOption
-    {
-        public string Name { get; set; } = "";
-        public string Hex { get; set; } = "";
-    }
+    
 }
 
-@* Data model for the study set *@
-@code {
-    public class StudySetData
-    {
-        public string Name { get; set; } = "";
-        public string Color { get; set; } = "";
-        public string Folder { get; set; } = "";
-    }
-}
