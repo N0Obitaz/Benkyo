@@ -14,6 +14,15 @@ module.exports = {
     theme: {
         extend: {
             colors: {
+                // studyset colors 
+                study: {
+                    blue: '#60a5fa',
+                    green: '#34d399',
+                    purple: '#a78bfa',
+                    rose: '#fb7185',
+                    slate: '#94a3b8',
+                    amber: '#f59e0b',
+                },
                 // Brand Colors
                 primary: {
                     50: '#f0f9ff',
