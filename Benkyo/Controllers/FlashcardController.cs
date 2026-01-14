@@ -18,7 +18,7 @@ namespace Benkyo.Controllers
 
 
         [HttpPost("flashcard/create")]
-        private async Task<IActionResult> CreateFlashcard([FromBody] Flashcard flashcardRequest)
+        public async Task<IActionResult> CreateFlashcard([FromBody] Flashcard flashcardRequest)
         {
             try
             {

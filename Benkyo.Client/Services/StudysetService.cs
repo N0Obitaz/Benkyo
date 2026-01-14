@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Json;
+using System.Text.Json;
 using Shared.Models;
 
 namespace Benkyo.Client.Services
@@ -14,6 +15,32 @@ namespace Benkyo.Client.Services
             _httpClient = httpClient;
         }
         // Implement study set related methods here
+
+        //will need userId to get studysets for specific user I'll change it later
+        public async Task<List<Studyset>> GetUserStudySetAsync()
+        {
+            try
+            {
+                using var ht = new HttpClient { BaseAddress = new Uri("https://localhost:7218") };
+                //this will be changed as there are user catered studysets
+
+                var response = await ht.GetStringAsync("api/studyset/all");
+
+                var options = new JsonSerializerOptions
+                {
+                    ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve
+                };
+
+                var studysets = JsonSerializer.Deserialize<List<Studyset>>(response, options);
+
+                if (studysets is not null) return studysets;
+            }catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+          return new List<Studyset>();
+        }
+
         public async Task<bool> CreateStudySetAsync(Studyset studyset)
         {
             var response = await _httpClient.PostAsJsonAsync("api/studyset/create", studyset);

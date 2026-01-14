@@ -45,7 +45,7 @@ namespace Benkyo.Controllers
 
         // Edit Lesson Here
         [HttpPost("edit")]
-        private async Task<IActionResult> EditLesson([FromBody] Lesson request)
+        public async Task<IActionResult> EditLesson([FromBody] Lesson request)
         {
             try
             {
@@ -66,7 +66,7 @@ namespace Benkyo.Controllers
             }
         }
 
-        private async Task<IActionResult> DeleteLesson([FromBody] string lessonId)
+        public async Task<IActionResult> DeleteLesson([FromBody] string lessonId)
         {
             try
             {

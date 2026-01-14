@@ -19,7 +19,7 @@ namespace Benkyo.Controllers
         
 
         [HttpPost("create")]
-        private async Task<IActionResult> CreateStudySet([FromBody] Studyset request)
+        public async Task<IActionResult> CreateStudySet([FromBody] Studyset request)
         {
             Console.WriteLine("You're here na");
             
@@ -34,7 +34,9 @@ namespace Benkyo.Controllers
 
                 var studysetData = new Dictionary<string, object>
                 {
-                    { "StudySetName", request.StudySetName ?? "Untitled Study Set" },
+                    { "studyset_name", request.StudySetName ?? "Untitled Study Set" },
+                    { "user_id", request.UserId ?? "test-user-id" },
+                    { "studyset_color", request.StudySetColor ?? "blue" },
                     { "Lessons", request.Lessons ?? new List<Lesson>() }
                 };
 
@@ -50,7 +52,7 @@ namespace Benkyo.Controllers
         }
 
         [HttpPost("edit")]
-        private async Task<IActionResult> EditStudySet([FromBody] Studyset request)
+        public async Task<IActionResult> EditStudySet([FromBody] Studyset request)
         {
             try
             {
@@ -74,7 +76,7 @@ namespace Benkyo.Controllers
 
         // Delete Studyset
         [HttpPost("delete")]
-        private async Task<IActionResult> DeleteStudyset([FromBody] Studyset request)
+        public async Task<IActionResult> DeleteStudyset([FromBody] Studyset request)
         {
             try
             {
@@ -91,21 +93,20 @@ namespace Benkyo.Controllers
         }
 
         // Fetch all Studysets based on User Id
-        [HttpGet("all/{userId}")]
-        private async Task<IActionResult> GetAllStudysets(string userId)
+        //[HttpGet("all/{userId}")]
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAllStudysets()
         {
+            string userId = "test-user-id";
+            Console.WriteLine("Youre here na 1");
+
+           List<Studyset> studysets = new List<Studyset>();
             try
             {
                 var studysetsRef = _firebaseService._db.Collection("studysets");
-                var query = studysetsRef.WhereEqualTo("UserId", userId);
+                var query = studysetsRef.WhereEqualTo("user_id", userId);
                 var snapshot = await query.GetSnapshotAsync();
-                var studysets = new List<Studyset>();
-                foreach (var document in snapshot.Documents)
-                {
-                    var studyset = document.ConvertTo<Studyset>();
-                    studyset.Id = document.Id;
-                    studysets.Add(studyset);
-                }
+               
                 return Ok(studysets);
             }
             catch (Exception ex)

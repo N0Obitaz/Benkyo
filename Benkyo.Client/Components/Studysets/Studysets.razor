@@ -1,10 +1,11 @@
 ﻿@page "/studysets"
 @rendermode InteractiveWebAssembly
+@inject StudysetService studysetService
 @inject IJSRuntime runtime
 
 <!-- Create Input Fields for creation of studyset-->
 
-<div class="p-6">
+<div class="p-6 justify-between">
     <h1 class="text-2xl font-bold mb-4">My Decks</h1>
 
     <button @onclick="OpenAddModal"
@@ -15,8 +16,17 @@
     <AddStudySetModal @bind-IsOpen="_isModalOpen" />
 </div>
 
+
+
 @code {
     private bool _isModalOpen  { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Fetching of studysets
+		await studysetService.GetUserStudySetAsync();
+        
+    }
 
     private async Task OpenAddModal()
     {
