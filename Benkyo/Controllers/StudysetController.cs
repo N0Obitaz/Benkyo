@@ -56,20 +56,26 @@ namespace Benkyo.Controllers
         {
             try
             {
+                Console.WriteLine(request.StudySetName);
+                Console.WriteLine(request.StudySetColor);
+                Console.WriteLine(request.Id);
 
-                var studysetRef = await _firebaseService._db.Collection("studysets").Document(request.Id ?? "").GetSnapshotAsync();
+                var studysetRef = _firebaseService._db.Collection("studysets").Document(request.Id);
 
                 var studysetData = new Dictionary<string, object>
                 {
-                    { "StudySetName", request.StudySetName }
+                    {"studyset_name", request.StudySetName },
+                    {"studyset_color", request.StudySetColor},
+                    {"user_id", "test-user-id" }
                 };
-                await studysetRef.Reference.UpdateAsync(studysetData);
+                await studysetRef.UpdateAsync(studysetData);
                 return Ok(new { Message = "Study Set Edited" });
 
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error editing study set{ex.Message}");
+                Console.WriteLine($"Error Editing Stuydset: {ex.Message}");
+                return BadRequest(ex.Message);
             }
 
         }
