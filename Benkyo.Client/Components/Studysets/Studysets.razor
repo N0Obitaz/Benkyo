@@ -4,26 +4,70 @@
 @inject Studyset studyset
 @inject IJSRuntime runtime
 
-<!-- Create Input Fields for creation of studyset-->
+<div class="max-w-7xl mx-auto px-6 py-12 min-h-screen bg-gradient-to-br from-slate-50 to-slate-100/50">
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
+        <h1 class="text-4xl font-bold text-slate-900 tracking-tight">My Decks</h1>
+        <div class="flex items-center gap-3">
+            <button @onclick="OpenAddModal"
+                    class="flex items-center gap-2 px-5 py-2.5 bg-blue-500 text-white rounded-xl font-medium hover:bg-blue-600 transition-all duration-200 shadow-sm hover:shadow">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                </svg>
+                Add Deck
+            </button>
+            <button class="px-6 py-2.5 bg-slate-900 text-white rounded-xl font-medium hover:bg-slate-800 transition-all duration-200 shadow-sm hover:shadow">
+                Study
+            </button>
+            <button class="p-2.5 text-slate-500 hover:bg-white hover:text-slate-700 rounded-xl transition-all duration-200">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+            </button>
+        </div>
+    </div>
 
-<div class="p-6 justify-between">
-    <h1 class="text-2xl font-bold mb-4">My Decks</h1>
+    <!-- Deck Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+        @foreach (var studyset in studysets)
+        {
+            <div class="group cursor-pointer bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-slate-200/50 hover:border-slate-300">
+                <!-- Colored Header - More Vibrant -->
+                <div class="h-32 relative flex items-end p-5 transition-all duration-300"
+                     style="background-color: @(string.IsNullOrEmpty(studyset.StudySetColor) ? "#38bdf8" : studyset.StudySetColor)">
+                    <!-- Menu Button -->
+                    <div class="absolute top-4 right-4">
+                        <button class="p-2 bg-white/95 hover:bg-white rounded-lg text-slate-600 shadow-sm transition-all duration-200 hover:scale-105">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
+                            </svg>
+                        </button>
+                        <!-- Dropdown Menu -->
+                        <div class="absolute right-0 mt-2 w-36 bg-white rounded-lg shadow-lg border border-slate-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10 overflow-hidden">
+                            <button class="w-full text-left px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 flex items-center gap-2 transition-colors">
+                                <span>✏️</span> Edit
+                            </button>
+                            <button class="w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2 transition-colors">
+                                <span>🗑️</span> Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
 
-    <button @onclick="OpenAddModal"
-            class="px-6 py-3 bg-study-blue text-black rounded-xl hover:bg-indigo-700 transition-all">
-        + Add New Study Set
-    </button>
-
-    <AddStudySetModal @bind-IsOpen="_isModalOpen" />
+                <!-- Card Content -->
+                <div class="p-5">
+                    <h2 class="font-semibold text-slate-900 text-lg mb-1 line-clamp-2">
+                        @studyset.StudySetName
+                    </h2>
+                    <p class="text-slate-500 text-sm font-medium">
+                        @* @studyset.CardCount cards *@
+                        0 cards
+                    </p>
+                </div>
+            </div>
+        }
+    </div>
 </div>
-
-@foreach(var studyset in studysets)
-{
-    <p>@studyset.StudySetName</p>
-    <p>@studyset.StudySetColor</p>
-}
-
-
 @code {
     private bool _isModalOpen  { get; set; }
 
