@@ -1,6 +1,7 @@
 ﻿@page "/studysets"
 @rendermode InteractiveWebAssembly
 @inject StudysetService studysetService
+@inject Studyset studyset
 @inject IJSRuntime runtime
 
 <!-- Create Input Fields for creation of studyset-->
@@ -16,16 +17,23 @@
     <AddStudySetModal @bind-IsOpen="_isModalOpen" />
 </div>
 
+@foreach(var studyset in studysets)
+{
+    <p>@studyset.StudySetName</p>
+    <p>@studyset.StudySetColor</p>
+}
 
 
 @code {
     private bool _isModalOpen  { get; set; }
 
+    private List<Studyset> studysets = new();
+
     protected override async Task OnInitializedAsync()
     {
         // Fetching of studysets
-		await studysetService.GetUserStudySetAsync();
-        
+
+        studysets = await studysetService.GetUserStudySetAsync();
     }
 
     private async Task OpenAddModal()

@@ -106,7 +106,16 @@ namespace Benkyo.Controllers
                 var studysetsRef = _firebaseService._db.Collection("studysets");
                 var query = studysetsRef.WhereEqualTo("user_id", userId);
                 var snapshot = await query.GetSnapshotAsync();
-               
+                foreach (var document in snapshot.Documents)
+                {
+                    studysets.Add(new Studyset
+                    {
+                        Id = document.Id,
+                        StudySetColor = document.GetValue<string>("studyset_color"),
+                        StudySetName = document.GetValue<string>("studyset_name")
+                    });
+                   
+                }
                 return Ok(studysets);
             }
             catch (Exception ex)
