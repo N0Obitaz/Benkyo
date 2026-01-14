@@ -28,7 +28,7 @@ namespace Benkyo.Client.Services
 
                 var options = new JsonSerializerOptions
                 {
-                    ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve
+                    PropertyNameCaseInsensitive = true
                 };
 
                 var studysets = JsonSerializer.Deserialize<List<Studyset>>(response, options);
