@@ -104,7 +104,7 @@ namespace Benkyo.Controllers
         public async Task<IActionResult> GetAllStudysets()
         {
             string userId = "test-user-id";
-            Console.WriteLine("Youre here na 1");
+        
 
            List<Studyset> studysets = new List<Studyset>();
             try
