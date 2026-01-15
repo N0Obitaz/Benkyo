@@ -70,9 +70,11 @@
     </div>
 </div>
 
-<AddStudySetModal @bind-IsOpen="_isModalOpen" />
-<Edit selectedStudyset="@selectedStudyset" @bind-IsOpenEdit="_isEditModalOpen" />
-<Delete selectedStudyset="@selectedStudyset" @bind-IsOpenDelete="_isDeleteModalOpen" />
+
+
+<Benkyo.Client.Components.Studysets.AddStudySetModal @bind-IsOpen="_isModalOpen" />
+<Benkyo.Client.Components.Studysets.Edit selectedStudyset="@selectedStudyset" @bind-IsOpenEdit="_isEditModalOpen" />
+<Benkyo.Client.Components.Studysets.Delete selectedStudyset="@selectedStudyset" @bind-IsOpenDelete="_isDeleteModalOpen" />
 
 
 @code {
