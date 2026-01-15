@@ -56,10 +56,7 @@ namespace Benkyo.Controllers
         {
             try
             {
-                Console.WriteLine(request.StudySetName);
-                Console.WriteLine(request.StudySetColor);
-                Console.WriteLine(request.Id);
-
+               
                 var studysetRef = _firebaseService._db.Collection("studysets").Document(request.Id);
 
                 var studysetData = new Dictionary<string, object>
