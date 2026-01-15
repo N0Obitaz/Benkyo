@@ -56,10 +56,7 @@ namespace Benkyo.Controllers
         {
             try
             {
-                Console.WriteLine(request.StudySetName);
-                Console.WriteLine(request.StudySetColor);
-                Console.WriteLine(request.Id);
-
+               
                 var studysetRef = _firebaseService._db.Collection("studysets").Document(request.Id);
 
                 var studysetData = new Dictionary<string, object>
@@ -86,7 +83,7 @@ namespace Benkyo.Controllers
         {
             try
             {
-                var studysetRef = _firebaseService._db.Collection("studysets").Document(request.Id ?? "");
+                var studysetRef = _firebaseService._db.Collection("studysets").Document(request.Id);
 
                 await studysetRef.DeleteAsync();
                 return Ok(new { Message = "Study Set Deleted" });
@@ -104,7 +101,7 @@ namespace Benkyo.Controllers
         public async Task<IActionResult> GetAllStudysets()
         {
             string userId = "test-user-id";
-            Console.WriteLine("Youre here na 1");
+        
 
            List<Studyset> studysets = new List<Studyset>();
             try

@@ -32,10 +32,7 @@ namespace Benkyo.Client.Services
                 };
 
                 var studysets = JsonSerializer.Deserialize<List<Studyset>>(response, options);
-                foreach(var studyset in studysets)
-                {
-                    Console.WriteLine($"{studyset.Id} - {studyset.StudySetColor}");
-                }
+             
                 if (studysets is not null) return studysets;
             }catch(Exception ex)
             {

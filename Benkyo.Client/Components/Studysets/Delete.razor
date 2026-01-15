@@ -1,0 +1,62 @@
+﻿@rendermode InteractiveWebAssembly
+@inject StudysetService studysetService
+
+<div class="@(IsOpenDelete ? "fixed" : "hidden") inset-0 z-50 flex items-center justify-center p-5 bg-black/45 backdrop-blur-sm transition-opacity duration-300"
+     @onclick="CloseDeleteModal">
+    <div class="bg-white rounded-3xl w-full max-w-[480px] shadow-2xl transform transition-all duration-300 @(IsOpenDelete ? "scale-100 opacity-100" : "scale-90 opacity-0")"
+         @onclick:stopPropagation>
+
+        <!-- Modal Header with Icon -->
+        <div class="flex flex-col items-center px-10 pt-10 pb-6">
+            <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-5">
+                <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+            </div>
+            <h2 class="text-2xl font-semibold text-gray-900 tracking-tight mb-2">Delete study set?</h2>
+            <p class="text-center text-gray-600 text-base leading-relaxed">
+                Are you sure you want to delete "<span class="font-semibold text-gray-900">@selectedStudyset?.StudySetName</span>"? This action cannot be undone.
+            </p>
+        </div>
+
+        <!-- Modal Actions -->
+        <div class="px-10 pb-10 flex gap-3">
+            <button @onclick="CloseDeleteModal"
+                    class="flex-1 px-5 py-4 bg-gray-100 text-gray-700 rounded-2xl text-base font-semibold hover:bg-gray-200 transition-all duration-200 tracking-tight">
+                Cancel
+            </button>
+            <button @onclick="ConfirmDelete"
+                    class="flex-1 px-5 py-4 bg-red-600 text-white rounded-2xl text-base font-semibold hover:bg-red-700 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-red-600/30 active:translate-y-0 transition-all duration-200 tracking-tight">
+                Delete
+            </button>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public bool IsOpenDelete { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> IsOpenDeleteChanged { get; set; }
+
+    [Parameter]
+    public Studyset selectedStudyset { get; set; }
+
+    private async Task CloseDeleteModal()
+    {
+        IsOpenDelete = false;
+        await IsOpenDeleteChanged.InvokeAsync(false);
+    }
+
+    private async Task ConfirmDelete()
+    {
+        if (selectedStudyset is not null && selectedStudyset.Id is not null)
+        {
+            await studysetService.DeleteStudySetAsync(selectedStudyset.Id);
+
+            IsOpenDelete = false;
+            await IsOpenDeleteChanged.InvokeAsync(false);
+        }
+    }
+}
