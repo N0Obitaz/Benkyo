@@ -1,0 +1,31 @@
+﻿@rendermode InteractiveWebAssembly
+@inject StudysetService studysetService
+
+<h3>Delete</h3>
+
+
+
+@code {
+    [Parameter]
+    public string? selectedStudysetId { get; set; }
+
+	[Parameter]
+	public bool IsOpenDelete { get; set; }
+
+	[Parameter]
+	public EventCallback<bool> IsOpenDeleteChanged { get; set; }
+
+    private async Task CloseModal()
+    {
+        IsOpenDelete = false;
+        await IsOpenDeleteChanged.InvokeAsync(IsOpenDelete);
+    }
+
+    private async Task SubmitForm()
+    {
+        if (selectedStudysetId != null)
+            await studysetService.DeleteStudySetAsync(selectedStudysetId);
+
+        await CloseModal();
+    }
+}
