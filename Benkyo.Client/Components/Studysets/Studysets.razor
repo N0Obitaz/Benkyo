@@ -47,7 +47,8 @@
                             <button @onclick="() => OpenEditModal(studyset)" class="w-full text-left px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 flex items-center gap-2 transition-colors">
                                 <span>✏️</span> Edit
                             </button>
-                            <button class="w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2 transition-colors">
+                            <button @onclick="() => OpenDeleteModal(studyset)"
+                                    class="w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2 transition-colors">
                                 <span>🗑️</span> Delete
                             </button>
                         </div>
@@ -71,9 +72,14 @@
 
 <AddStudySetModal @bind-IsOpen="_isModalOpen" />
 <Edit selectedStudyset="@selectedStudyset" @bind-IsOpenEdit="_isEditModalOpen" />
+<Delete selectedStudyset="@selectedStudyset" @bind-IsOpenDelete="_isDeleteModalOpen" />
+
+
 @code {
     private bool _isModalOpen  { get; set; }
     private bool _isEditModalOpen { get; set;  }
+    private bool _isDeleteModalOpen = false;
+
     private Studyset? selectedStudyset;
 
 
@@ -85,6 +91,12 @@
         // Fetching of studysets
 
         studysets = await studysetService.GetUserStudySetAsync();
+    }
+
+    private void OpenDeleteModal(Studyset studyset)
+    {
+        selectedStudyset = studyset;
+        _isDeleteModalOpen = true;
     }
 
     private async Task OpenAddModal()
