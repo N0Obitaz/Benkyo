@@ -89,7 +89,7 @@
     protected override async Task OnInitializedAsync()
     {
         // Fetching of studysets
-
+        StateHasChanged();
         studysets = await studysetService.GetUserStudySetAsync();
     }
 
@@ -98,7 +98,7 @@
         selectedStudyset = studyset;
         _isDeleteModalOpen = true;
     }
-
+    
     private async Task OpenAddModal()
     {
 
