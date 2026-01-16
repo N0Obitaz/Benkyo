@@ -66,7 +66,8 @@ namespace Benkyo.Controllers
                
             }catch(Exception ex)
             {
-                Console.WriteLine(ex.Message);
+
+                throw new Exception("Error Deleting Flashcard", ex);
             }
         }
 
