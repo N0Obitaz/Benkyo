@@ -46,8 +46,7 @@ namespace Benkyo.Controllers
         {
             try
             {
-                if (flashcardRequest != null)
-                {
+                
                     var flashcardRef = _firebaseService._db.Collection("flashcards").Document(flashcardRequest.Id);
 
                     var flashcardData = new Dictionary<string, object>
@@ -61,13 +60,14 @@ namespace Benkyo.Controllers
                     await flashcardRef.UpdateAsync(flashcardData);
 
                     return Ok(new { Message = "Flashcard updated!" });
-                }
+           
 
-                return BadRequest(new { Error = "Error Updating Flashcard" });
+          
                
             }catch(Exception ex)
             {
-                Console.WriteLine(ex.Message);
+
+                throw new Exception("Error Deleting Flashcard", ex);
             }
         }
 
@@ -76,11 +76,23 @@ namespace Benkyo.Controllers
         {
             try
             {
-                return Ok(new { Message = "Flashcard Dleted!" });
+                
+                    var flashcardRef = _firebaseService._db.Collection("flashcards").Document(flashcardRequest.Id);
+
+                    await flashcardRef.DeleteAsync();
+
+                    return Ok(new { Message = "Flashcard Deleted!" });
+               
+
+                   
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+
+                throw new Exception("Error Deleting Flashcard", ex);
+{
+
+                };
             }
         }
 
