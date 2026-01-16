@@ -62,8 +62,22 @@ namespace Benkyo.Controllers
 
                     return Ok(new { Message = "Flashcard updated!" });
                 }
+
+                return BadRequest(new { Error = "Error Updating Flashcard" });
                
             }catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        [HttpPost("delete")]
+        public async Task<IActionResult> DeleteFlashcard([FromBody] Flashcard flashcardRequest)
+        {
+            try
+            {
+                return Ok(new { Message = "Flashcard Dleted!" });
+            }catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
