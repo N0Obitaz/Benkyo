@@ -17,7 +17,7 @@ namespace Benkyo.Controllers
         }
 
 
-        [HttpPost("/create")]
+        [HttpPost("create")]
         public async Task<IActionResult> CreateFlashcard([FromBody] Flashcard flashcardRequest)
         {
             try
@@ -38,6 +38,31 @@ namespace Benkyo.Controllers
             catch (Exception ex)
             {
                 throw new Exception("Error creating flashcard", ex);
+            }
+        }
+
+        [HttpPost("edit")]
+        public async Task<IActionResult> EditFlashcard([FromBody] Flashcard flashcardRequest)
+        {
+            try
+            {
+                if (flashcardRequest != null)
+                {
+                    var flashcardRef = _firebaseService._db.Collection("flashcards").Document(flashcardRequest.Id);
+
+                    var flashcardData = new Dictionary<string, object>
+                    {
+
+                         {"question", flashcardRequest.Question! },
+                         {"answer", flashcardRequest.Answer! }
+
+
+                    };
+                }
+               
+            }catch(Exception ex)
+            {
+
             }
         }
 
