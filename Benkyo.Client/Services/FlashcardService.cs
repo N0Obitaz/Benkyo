@@ -21,9 +21,14 @@ namespace Benkyo.Client.Services
 
         public async Task<bool> EditFlashcardAsync(Flashcard flashcard)
         {
-            var response = await _httpClient.PostAsJsonAsync("api/flashcard/create", flashcard)
+            var response = await _httpClient.PostAsJsonAsync("api/flashcard/create", flashcard);
 
                 return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> DeleteFlashcardAsync(Flashcard flashcard)
+        {
+
         }
     }
 }
