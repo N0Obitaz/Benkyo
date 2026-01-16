@@ -77,7 +77,8 @@ namespace Benkyo.Controllers
             try
             {
                 return Ok(new { Message = "Flashcard Dleted!" });
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
