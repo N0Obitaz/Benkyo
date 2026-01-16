@@ -58,11 +58,14 @@ namespace Benkyo.Controllers
 
 
                     };
+                    await flashcardRef.UpdateAsync(flashcardData);
+
+                    return Ok(new { Message = "Flashcard updated!" });
                 }
                
             }catch(Exception ex)
             {
-
+                Console.WriteLine(ex.Message);
             }
         }
 
