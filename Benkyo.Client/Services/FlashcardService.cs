@@ -18,5 +18,10 @@ namespace Benkyo.Client.Services
 
             return response.IsSuccessStatusCode;
         }
+
+        public async Task<bool> EditFlashcardAsync(Flashcard flashcard)
+        {
+
+        }
     }
 }
