@@ -10,10 +10,41 @@ namespace Benkyo.Controllers
     {
 
         private readonly FirebaseService _firebaseService;
+        
 
         public FlashcardController(FirebaseService firebaseService)
         {
             _firebaseService = firebaseService;
+        }
+
+        [HttpGet("all")]
+        public async Task<IActionResult> FetchAllFlashcard([FromBody] Flashcard flashcardRequest)
+        {
+            string userId = "test-user-id";
+            try
+            {
+                List<Flashcard> flashcards = new();
+                var flashcardRef = _firebaseService._db.Collection("flashcards");
+                var query = flashcardRef.WhereEqualTo("user_id", userId);
+                var snapshot = await query.GetSnapshotAsync();
+
+                foreach(var document in snapshot.Documents)
+                {
+                    flashcards.Add(new Flashcard
+                    {
+                        Id = document.Id,
+                        Question = document.GetValue<string>("question"),
+                        Answer = document.GetValue<string>("answer"),
+                        Tag = document.GetValue<string>("tag")
+                    });
+                }
+                return Ok(flashcards);
+
+            } catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw new Exception("Error fetcing flashcards", ex);
+            }
         }
 
 
