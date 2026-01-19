@@ -27,7 +27,7 @@ namespace Benkyo.Client.Services
                     PropertyNameCaseInsensitive = true
                 };
 
-                var flashcards = JsonSerializer.Deserialize<List<Flashcard>>(response);
+                var flashcards = JsonSerializer.Deserialize<List<Flashcard>>(response, options);
 
                 if (flashcards != null) return flashcards;
 
