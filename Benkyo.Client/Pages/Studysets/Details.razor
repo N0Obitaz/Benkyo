@@ -1,5 +1,6 @@
 ﻿@page "/studysets/view/{id}"
 @inject NavigationManager NavigationManager
+@inject FlashcardService flashcardService
 @rendermode InteractiveWebAssembly
 
 <div class="h-screen flex flex-col bg-white overflow-hidden">
@@ -146,7 +147,7 @@
 
 @code {
     [Parameter]
-    public string Id { get; set; }
+    public string? Id { get; set; }
 
     private string studySetName = "Sample Study Set";
     private int currentCardIndex = 1;
@@ -163,21 +164,9 @@
 
     protected override async Task OnInitializedAsync()
     {
-        await LoadStudySet(Id);
-    }
-
-    private async Task LoadStudySet(string id)
-    {
         studySetName = "Sample Study Set";
 
-        flashcards = new List<Flashcard>
-        {
-            new Flashcard { Question = "What is the capital of France?", Answer = "Paris" },
-            new Flashcard { Question = "What is 2 + 2?", Answer = "4" },
-            new Flashcard { Question = "What color is the sky?", Answer = "Blue" },
-            new Flashcard { Question = "What is the largest planet?", Answer = "Jupiter" },
-            new Flashcard { Question = "How many continents are there?", Answer = "7" }
-        };
+        flashcards = await flashcardService.GetStudysetFlashcardAsync(Id);
 
         totalCards = flashcards.Count;
         if (flashcards.Any())
@@ -185,6 +174,8 @@
             currentCard = flashcards[0];
         }
     }
+
+   
 
     private string GetCardClass()
     {
@@ -267,9 +258,4 @@
         NavigationManager.NavigateTo("/");
     }
 
-    public class Flashcard
-    {
-        public string Question { get; set; }
-        public string Answer { get; set; }
-    }
 }
