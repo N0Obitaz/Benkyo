@@ -26,43 +26,45 @@
         </div>
     </div>
 
-    <!-- Main Content Area - Reduced padding -->
+    <!-- Main Content Area -->
     <div class="flex-1 flex items-center justify-center px-6 py-4 max-w-6xl mx-auto w-full">
         <div class="w-full max-w-4xl">
             <!-- Flashcard -->
-            <div class="perspective-1000 mb-6">
-                <div class="@(isFlipped ? "rotate-y-180" : "") preserve-3d transition-transform duration-500 cursor-pointer"
-                     @onclick="FlipCard">
-                    
-                    <!-- Front of Card (Question) -->
-                    <div class="@(isFlipped ? "invisible" : "visible") backface-hidden">
-                        <div class="bg-white border-2 border-slate-200 rounded-xl p-12 h-[380px] flex flex-col items-center justify-center shadow-sm hover:shadow-md transition-shadow duration-200">
-                            <div class="w-full">
-                                <div class="flex items-center justify-center mb-4">
-                                    <span class="inline-block px-3 py-1 bg-slate-100 text-slate-700 text-xs font-semibold uppercase tracking-wider rounded">Question</span>
-                                </div>
-                                <p class="text-2xl font-medium text-slate-900 text-center leading-relaxed mb-6">
-                                    @currentCard?.Question
-                                </p>
-                                <div class="text-center">
-                                    <p class="text-xs text-slate-400 font-medium">Click to reveal answer</p>
+            <div class="mb-6 relative h-[380px] overflow-visible">
+                <div class="@GetCardClass()" style="@GetCardStyle()">
+                    <div class="@(isFlipped ? "rotate-y-180" : "") preserve-3d transition-transform duration-500 cursor-pointer"
+                         @onclick="FlipCard">
+
+                        <!-- Front of Card (Question) -->
+                        <div class="@(isFlipped ? "invisible" : "visible") backface-hidden">
+                            <div class="bg-white border-2 border-slate-200 rounded-xl p-12 h-[380px] flex flex-col items-center justify-center shadow-lg">
+                                <div class="w-full">
+                                    <div class="flex items-center justify-center mb-4">
+                                        <span class="inline-block px-3 py-1 bg-slate-100 text-slate-700 text-xs font-semibold uppercase tracking-wider rounded">Question</span>
+                                    </div>
+                                    <p class="text-2xl font-medium text-slate-900 text-center leading-relaxed mb-6">
+                                        @currentCard?.Question
+                                    </p>
+                                    <div class="text-center">
+                                        <p class="text-xs text-slate-400 font-medium">Click to reveal answer</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Back of Card (Answer) -->
-                    <div class="@(isFlipped ? "visible" : "invisible") backface-hidden absolute inset-0 rotate-y-180">
-                        <div class="bg-slate-900 border-2 border-slate-800 rounded-xl p-12 h-[380px] flex flex-col items-center justify-center shadow-sm">
-                            <div class="w-full">
-                                <div class="flex items-center justify-center mb-4">
-                                    <span class="inline-block px-3 py-1 bg-slate-800 text-slate-300 text-xs font-semibold uppercase tracking-wider rounded">Answer</span>
-                                </div>
-                                <p class="text-2xl font-medium text-white text-center leading-relaxed mb-6">
-                                    @currentCard?.Answer
-                                </p>
-                                <div class="text-center">
-                                    <p class="text-xs text-slate-400 font-medium">Click to flip back</p>
+                        <!-- Back of Card (Answer) -->
+                        <div class="@(isFlipped ? "visible" : "invisible") backface-hidden absolute inset-0 rotate-y-180">
+                            <div class="bg-slate-900 border-2 border-slate-800 rounded-xl p-12 h-[380px] flex flex-col items-center justify-center shadow-lg">
+                                <div class="w-full">
+                                    <div class="flex items-center justify-center mb-4">
+                                        <span class="inline-block px-3 py-1 bg-slate-800 text-slate-300 text-xs font-semibold uppercase tracking-wider rounded">Answer</span>
+                                    </div>
+                                    <p class="text-2xl font-medium text-white text-center leading-relaxed mb-6">
+                                        @currentCard?.Answer
+                                    </p>
+                                    <div class="text-center">
+                                        <p class="text-xs text-slate-400 font-medium">Click to flip back</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -142,11 +144,12 @@
     </div>
 </div>
 
+
 @code {
     [Parameter]
-    public string? Id { get; set; }
+    public string Id { get; set; }
 
-    private string studySetName = "Loading...";
+    private string studySetName = "Sample Study Set";
     private int currentCardIndex = 1;
     private int totalCards = 0;
     private bool isFlipped = false;
@@ -157,23 +160,24 @@
     private Flashcard currentCard;
     private List<Flashcard> flashcards = new();
 
+    private string slideState = "center"; // "center", "slide-left", "slide-right"
+
     protected override async Task OnInitializedAsync()
     {
-        // Load your study set and flashcards here
         await LoadStudySet(Id);
     }
 
     private async Task LoadStudySet(string id)
     {
-        // TODO: Replace with your actual data loading logic
         studySetName = "Sample Study Set";
 
-        // Sample data
         flashcards = new List<Flashcard>
         {
             new Flashcard { Question = "What is the capital of France?", Answer = "Paris" },
             new Flashcard { Question = "What is 2 + 2?", Answer = "4" },
-            new Flashcard { Question = "What color is the sky?", Answer = "Blue" }
+            new Flashcard { Question = "What color is the sky?", Answer = "Blue" },
+            new Flashcard { Question = "What is the largest planet?", Answer = "Jupiter" },
+            new Flashcard { Question = "How many continents are there?", Answer = "7" }
         };
 
         totalCards = flashcards.Count;
@@ -183,19 +187,69 @@
         }
     }
 
+    private string GetCardClass()
+    {
+        return "transition-all duration-500 ease-out";
+    }
+
+    private string GetCardStyle()
+    {
+        if (slideState == "slide-left")
+        {
+            return "transform: translateX(-150%) rotate(-20deg); opacity: 0;";
+        }
+        else if (slideState == "slide-right")
+        {
+            return "transform: translateX(150%) rotate(20deg); opacity: 0;";
+        }
+        return "transform: translateX(0) rotate(0); opacity: 1;";
+    }
+
     private void FlipCard()
     {
         isFlipped = !isFlipped;
     }
 
-    private void NextCard()
+    private async Task SlideCard(string direction)
     {
         if (currentCardIndex < totalCards)
         {
+            // Trigger slide animation
+            slideState = direction;
+            StateHasChanged();
+
+            await Task.Delay(500); // Wait for slide animation
+
+            // Update to next card
             currentCardIndex++;
             currentCard = flashcards[currentCardIndex - 1];
             isFlipped = false;
+            slideState = "center";
+            StateHasChanged();
         }
+    }
+
+    private async Task MarkAsHard()
+    {
+        hardCount++;
+        await SlideCard("slide-left");
+    }
+
+    private async Task MarkAsGood()
+    {
+        goodCount++;
+        await SlideCard("slide-right");
+    }
+
+    private async Task MarkAsEasy()
+    {
+        easyCount++;
+        await SlideCard("slide-right");
+    }
+
+    private async Task NextCard()
+    {
+        await SlideCard("slide-right");
     }
 
     private void PreviousCard()
@@ -205,25 +259,8 @@
             currentCardIndex--;
             currentCard = flashcards[currentCardIndex - 1];
             isFlipped = false;
+            StateHasChanged();
         }
-    }
-
-    private void MarkAsHard()
-    {
-        hardCount++;
-        NextCard();
-    }
-
-    private void MarkAsGood()
-    {
-        goodCount++;
-        NextCard();
-    }
-
-    private void MarkAsEasy()
-    {
-        easyCount++;
-        NextCard();
     }
 
     private void GoBack()
