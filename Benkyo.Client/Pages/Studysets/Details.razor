@@ -1,7 +1,276 @@
-﻿@page "/studysets/{id}"
+﻿@page "/studysets/view/{id}"
+@inject NavigationManager NavigationManager
+@rendermode InteractiveWebAssembly
 
-<h3>StudysetById</h3>
+<div class="h-screen flex flex-col bg-white overflow-hidden">
+    <!-- Compact Header -->
+    <div class="border-b border-slate-200 bg-white shadow-sm flex-shrink-0">
+        <div class="max-w-6xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <button @onclick="GoBack"
+                        class="flex items-center gap-2 px-3 py-1.5 text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-lg transition-all duration-200">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                    <span class="text-sm font-medium">Back</span>
+                </button>
+                <h1 class="text-lg font-semibold text-slate-900">@studySetName</h1>
+                <div class="flex items-center gap-4">
+                    <span class="text-sm text-slate-600">@currentCardIndex / @totalCards</span>
+                    <div class="w-32 bg-slate-100 rounded-full h-1.5">
+                        <div class="bg-slate-900 h-1.5 transition-all duration-300 rounded-full"
+                             style="width: @(((double)currentCardIndex / totalCards) * 100)%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="flex-1 flex items-center justify-center px-6 py-4 max-w-6xl mx-auto w-full">
+        <div class="w-full max-w-4xl">
+            <!-- Flashcard -->
+            <div class="mb-6 relative h-[380px] overflow-visible">
+                <div class="@GetCardClass()" style="@GetCardStyle()">
+                    <div class="@(isFlipped ? "rotate-y-180" : "") preserve-3d transition-transform duration-500 cursor-pointer"
+                         @onclick="FlipCard">
+
+                        <!-- Front of Card (Question) -->
+                        <div class="@(isFlipped ? "invisible" : "visible") backface-hidden">
+                            <div class="bg-white border-2 border-slate-200 rounded-xl p-12 h-[380px] flex flex-col items-center justify-center shadow-lg">
+                                <div class="w-full">
+                                    <div class="flex items-center justify-center mb-4">
+                                        <span class="inline-block px-3 py-1 bg-slate-100 text-slate-700 text-xs font-semibold uppercase tracking-wider rounded">Question</span>
+                                    </div>
+                                    <p class="text-2xl font-medium text-slate-900 text-center leading-relaxed mb-6">
+                                        @currentCard?.Question
+                                    </p>
+                                    <div class="text-center">
+                                        <p class="text-xs text-slate-400 font-medium">Click to reveal answer</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Back of Card (Answer) -->
+                        <div class="@(isFlipped ? "visible" : "invisible") backface-hidden absolute inset-0 rotate-y-180">
+                            <div class="bg-slate-900 border-2 border-slate-800 rounded-xl p-12 h-[380px] flex flex-col items-center justify-center shadow-lg">
+                                <div class="w-full">
+                                    <div class="flex items-center justify-center mb-4">
+                                        <span class="inline-block px-3 py-1 bg-slate-800 text-slate-300 text-xs font-semibold uppercase tracking-wider rounded">Answer</span>
+                                    </div>
+                                    <p class="text-2xl font-medium text-white text-center leading-relaxed mb-6">
+                                        @currentCard?.Answer
+                                    </p>
+                                    <div class="text-center">
+                                        <p class="text-xs text-slate-400 font-medium">Click to flip back</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actions Row -->
+            <div class="flex items-center justify-between gap-4">
+                <!-- Previous Button -->
+                <button @onclick="PreviousCard"
+                        disabled="@(currentCardIndex == 1)"
+                        class="px-4 py-2 bg-white border border-slate-300 text-slate-700 rounded-lg font-medium hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200 flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+
+                <!-- Difficulty Buttons -->
+                <div class="flex gap-3 flex-1 max-w-2xl">
+                    <button @onclick="MarkAsHard"
+                            class="group flex-1 px-4 py-3 bg-white border-2 border-slate-200 rounded-lg font-semibold hover:border-red-500 hover:bg-red-50 transition-all duration-200">
+                        <div class="text-lg mb-0.5">😓</div>
+                        <div class="text-xs text-slate-900 group-hover:text-red-600 font-semibold">Again</div>
+                        <div class="text-xs text-slate-500 group-hover:text-red-500">&lt;1m</div>
+                    </button>
+                    <button @onclick="MarkAsGood"
+                            class="group flex-1 px-4 py-3 bg-white border-2 border-slate-200 rounded-lg font-semibold hover:border-blue-500 hover:bg-blue-50 transition-all duration-200">
+                        <div class="text-lg mb-0.5">🙂</div>
+                        <div class="text-xs text-slate-900 group-hover:text-blue-600 font-semibold">Good</div>
+                        <div class="text-xs text-slate-500 group-hover:text-blue-500">&lt;10m</div>
+                    </button>
+                    <button @onclick="MarkAsEasy"
+                            class="group flex-1 px-4 py-3 bg-white border-2 border-slate-200 rounded-lg font-semibold hover:border-green-500 hover:bg-green-50 transition-all duration-200">
+                        <div class="text-lg mb-0.5">😊</div>
+                        <div class="text-xs text-slate-900 group-hover:text-green-600 font-semibold">Easy</div>
+                        <div class="text-xs text-slate-500 group-hover:text-green-500">4d</div>
+                    </button>
+                </div>
+
+                <!-- Next Button -->
+                <button @onclick="NextCard"
+                        disabled="@(currentCardIndex == totalCards)"
+                        class="px-4 py-2 bg-slate-900 text-white rounded-lg font-medium hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200 flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Compact Footer Stats -->
+    <div class="border-t border-slate-200 bg-slate-50 flex-shrink-0">
+        <div class="max-w-6xl mx-auto px-6 py-3">
+            <div class="flex items-center justify-center gap-8">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
+                        <span class="text-sm font-bold text-red-600">@hardCount</span>
+                    </div>
+                    <span class="text-xs font-medium text-slate-600">Again</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                        <span class="text-sm font-bold text-blue-600">@goodCount</span>
+                    </div>
+                    <span class="text-xs font-medium text-slate-600">Good</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                        <span class="text-sm font-bold text-green-600">@easyCount</span>
+                    </div>
+                    <span class="text-xs font-medium text-slate-600">Easy</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 @code {
+    [Parameter]
+    public string Id { get; set; }
 
+    private string studySetName = "Sample Study Set";
+    private int currentCardIndex = 1;
+    private int totalCards = 0;
+    private bool isFlipped = false;
+    private int hardCount = 0;
+    private int goodCount = 0;
+    private int easyCount = 0;
+
+    private Flashcard currentCard;
+    private List<Flashcard> flashcards = new();
+
+    private string slideState = "center"; // "center", "slide-left", "slide-right"
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadStudySet(Id);
+    }
+
+    private async Task LoadStudySet(string id)
+    {
+        studySetName = "Sample Study Set";
+
+        flashcards = new List<Flashcard>
+        {
+            new Flashcard { Question = "What is the capital of France?", Answer = "Paris" },
+            new Flashcard { Question = "What is 2 + 2?", Answer = "4" },
+            new Flashcard { Question = "What color is the sky?", Answer = "Blue" },
+            new Flashcard { Question = "What is the largest planet?", Answer = "Jupiter" },
+            new Flashcard { Question = "How many continents are there?", Answer = "7" }
+        };
+
+        totalCards = flashcards.Count;
+        if (flashcards.Any())
+        {
+            currentCard = flashcards[0];
+        }
+    }
+
+    private string GetCardClass()
+    {
+        return "transition-all duration-500 ease-out";
+    }
+
+    private string GetCardStyle()
+    {
+        if (slideState == "slide-left")
+        {
+            return "transform: translateX(-150%) rotate(-20deg); opacity: 0;";
+        }
+        else if (slideState == "slide-right")
+        {
+            return "transform: translateX(150%) rotate(20deg); opacity: 0;";
+        }
+        return "transform: translateX(0) rotate(0); opacity: 1;";
+    }
+
+    private void FlipCard()
+    {
+        isFlipped = !isFlipped;
+    }
+
+    private async Task SlideCard(string direction)
+    {
+        if (currentCardIndex < totalCards)
+        {
+            // Trigger slide animation
+            slideState = direction;
+            StateHasChanged();
+
+            await Task.Delay(500); // Wait for slide animation
+
+            // Update to next card
+            currentCardIndex++;
+            currentCard = flashcards[currentCardIndex - 1];
+            isFlipped = false;
+            slideState = "center";
+            StateHasChanged();
+        }
+    }
+
+    private async Task MarkAsHard()
+    {
+        hardCount++;
+        await SlideCard("slide-left");
+    }
+
+    private async Task MarkAsGood()
+    {
+        goodCount++;
+        await SlideCard("slide-right");
+    }
+
+    private async Task MarkAsEasy()
+    {
+        easyCount++;
+        await SlideCard("slide-right");
+    }
+
+    private async Task NextCard()
+    {
+        await SlideCard("slide-right");
+    }
+
+    private void PreviousCard()
+    {
+        if (currentCardIndex > 1)
+        {
+            currentCardIndex--;
+            currentCard = flashcards[currentCardIndex - 1];
+            isFlipped = false;
+            StateHasChanged();
+        }
+    }
+
+    private void GoBack()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+
+    public class Flashcard
+    {
+        public string Question { get; set; }
+        public string Answer { get; set; }
+    }
 }
