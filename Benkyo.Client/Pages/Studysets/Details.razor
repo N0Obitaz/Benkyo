@@ -3,7 +3,7 @@
 @rendermode InteractiveWebAssembly
 
 <div class="h-screen flex flex-col bg-white overflow-hidden">
-    <!-- Compact Header -->
+
     <div class="border-b border-slate-200 bg-white shadow-sm flex-shrink-0">
         <div class="max-w-6xl mx-auto px-6 py-4">
             <div class="flex items-center justify-between">
@@ -26,7 +26,7 @@
         </div>
     </div>
 
-    <!-- Main Content Area -->
+    
     <div class="flex-1 flex items-center justify-center px-6 py-4 max-w-6xl mx-auto w-full">
         <div class="w-full max-w-4xl">
             <!-- Flashcard -->
@@ -35,7 +35,7 @@
                     <div class="@(isFlipped ? "rotate-y-180" : "") preserve-3d transition-transform duration-500 cursor-pointer"
                          @onclick="FlipCard">
 
-                        <!-- Front of Card (Question) -->
+                        <!-- Question -->
                         <div class="@(isFlipped ? "invisible" : "visible") backface-hidden">
                             <div class="bg-white border-2 border-slate-200 rounded-xl p-12 h-[380px] flex flex-col items-center justify-center shadow-lg">
                                 <div class="w-full">
@@ -52,7 +52,7 @@
                             </div>
                         </div>
 
-                        <!-- Back of Card (Answer) -->
+                        <!-- Answer -->
                         <div class="@(isFlipped ? "visible" : "invisible") backface-hidden absolute inset-0 rotate-y-180">
                             <div class="bg-slate-900 border-2 border-slate-800 rounded-xl p-12 h-[380px] flex flex-col items-center justify-center shadow-lg">
                                 <div class="w-full">
@@ -83,7 +83,6 @@
                     </svg>
                 </button>
 
-                <!-- Difficulty Buttons -->
                 <div class="flex gap-3 flex-1 max-w-2xl">
                     <button @onclick="MarkAsHard"
                             class="group flex-1 px-4 py-3 bg-white border-2 border-slate-200 rounded-lg font-semibold hover:border-red-500 hover:bg-red-50 transition-all duration-200">
@@ -105,7 +104,7 @@
                     </button>
                 </div>
 
-                <!-- Next Button -->
+    
                 <button @onclick="NextCard"
                         disabled="@(currentCardIndex == totalCards)"
                         class="px-4 py-2 bg-slate-900 text-white rounded-lg font-medium hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200 flex items-center gap-2">
@@ -160,7 +159,7 @@
     private Flashcard currentCard;
     private List<Flashcard> flashcards = new();
 
-    private string slideState = "center"; // "center", "slide-left", "slide-right"
+    private string slideState = "center"; 
 
     protected override async Task OnInitializedAsync()
     {
