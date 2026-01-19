@@ -1,7 +1,207 @@
-﻿@page "/studysets/{id}"
+﻿@page "/studysets/view/{id}"
+@inject NavigationManager NavigationManager
+@rendermode InteractiveWebAssembly
 
-<h3>StudysetById</h3>
+<div class="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100/50">
+    <!-- Header -->
+    <div class="max-w-4xl mx-auto px-6 py-8">
+        <div class="flex items-center justify-between mb-8">
+            <button @onclick="GoBack"
+                    class="flex items-center gap-2 px-4 py-2 text-slate-700 hover:bg-white rounded-xl transition-all duration-200">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+                Back
+            </button>
+            <h1 class="text-2xl font-bold text-slate-900">@studySetName</h1>
+            <div class="w-20"></div> <!-- Spacer for centering -->
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="mb-8">
+            <div class="flex justify-between items-center mb-2">
+                <span class="text-sm font-medium text-slate-600">Progress</span>
+                <span class="text-sm font-semibold text-slate-900">@currentCardIndex / @totalCards</span>
+            </div>
+            <div class="w-full bg-slate-200 rounded-full h-2">
+                <div class="bg-blue-500 h-2 rounded-full transition-all duration-300"
+                     style="width: @(((double)currentCardIndex / totalCards) * 100)%"></div>
+            </div>
+        </div>
+
+        <!-- Flashcard -->
+        <div class="perspective-1000 mb-8">
+            <div class="@(isFlipped ? "rotate-y-180" : "") preserve-3d transition-transform duration-500 cursor-pointer"
+                 @onclick="FlipCard">
+                <div class="@(isFlipped ? "invisible" : "visible") backface-hidden">
+                    <!-- Front of Card (Question) -->
+                    <div class="bg-white rounded-3xl shadow-lg border border-slate-200 p-12 min-h-[400px] flex flex-col items-center justify-center">
+                        <div class="text-sm font-semibold text-blue-600 mb-4 uppercase tracking-wide">Question</div>
+                        <p class="text-3xl font-semibold text-slate-900 text-center">
+                            @currentCard?.Question
+                        </p>
+                        <div class="mt-8 text-slate-400 text-sm">Click to reveal answer</div>
+                    </div>
+                </div>
+
+                <div class="@(isFlipped ? "visible" : "invisible") backface-hidden absolute inset-0 rotate-y-180">
+                    <!-- Back of Card (Answer) -->
+                    <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-3xl shadow-lg p-12 min-h-[400px] flex flex-col items-center justify-center">
+                        <div class="text-sm font-semibold text-blue-100 mb-4 uppercase tracking-wide">Answer</div>
+                        <p class="text-3xl font-semibold text-white text-center">
+                            @currentCard?.Answer
+                        </p>
+                        <div class="mt-8 text-blue-100 text-sm">Click to flip back</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation & Actions -->
+        <div class="flex items-center justify-between gap-4">
+            <button @onclick="PreviousCard"
+                    disabled="@(currentCardIndex == 1)"
+                    class="px-6 py-3 bg-white border-2 border-slate-200 text-slate-700 rounded-xl font-semibold hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+            </button>
+
+            <div class="flex gap-3">
+                <button @onclick="MarkAsHard"
+                        class="px-6 py-3 bg-red-100 text-red-700 rounded-xl font-semibold hover:bg-red-200 transition-all duration-200">
+                    Hard
+                </button>
+                <button @onclick="MarkAsGood"
+                        class="px-6 py-3 bg-yellow-100 text-yellow-700 rounded-xl font-semibold hover:bg-yellow-200 transition-all duration-200">
+                    Good
+                </button>
+                <button @onclick="MarkAsEasy"
+                        class="px-6 py-3 bg-green-100 text-green-700 rounded-xl font-semibold hover:bg-green-200 transition-all duration-200">
+                    Easy
+                </button>
+            </div>
+
+            <button @onclick="NextCard"
+                    disabled="@(currentCardIndex == totalCards)"
+                    class="px-6 py-3 bg-slate-900 text-white rounded-xl font-semibold hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Stats -->
+        <div class="grid grid-cols-3 gap-4 mt-8">
+            <div class="bg-white rounded-2xl p-5 text-center border border-slate-200">
+                <div class="text-2xl font-bold text-red-600">@hardCount</div>
+                <div class="text-sm text-slate-600 mt-1">Hard</div>
+            </div>
+            <div class="bg-white rounded-2xl p-5 text-center border border-slate-200">
+                <div class="text-2xl font-bold text-yellow-600">@goodCount</div>
+                <div class="text-sm text-slate-600 mt-1">Good</div>
+            </div>
+            <div class="bg-white rounded-2xl p-5 text-center border border-slate-200">
+                <div class="text-2xl font-bold text-green-600">@easyCount</div>
+                <div class="text-sm text-slate-600 mt-1">Easy</div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 @code {
+    [Parameter]
+    public string? Id { get; set; }
 
+    private string studySetName = "Loading...";
+    private int currentCardIndex = 1;
+    private int totalCards = 0;
+    private bool isFlipped = false;
+    private int hardCount = 0;
+    private int goodCount = 0;
+    private int easyCount = 0;
+
+    private Flashcard currentCard;
+    private List<Flashcard> flashcards = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Load your study set and flashcards here
+        await LoadStudySet(Id);
+    }
+
+    private async Task LoadStudySet(string id)
+    {
+        // TODO: Replace with your actual data loading logic
+        studySetName = "Sample Study Set";
+
+        // Sample data
+        flashcards = new List<Flashcard>
+        {
+            new Flashcard { Question = "What is the capital of France?", Answer = "Paris" },
+            new Flashcard { Question = "What is 2 + 2?", Answer = "4" },
+            new Flashcard { Question = "What color is the sky?", Answer = "Blue" }
+        };
+
+        totalCards = flashcards.Count;
+        if (flashcards.Any())
+        {
+            currentCard = flashcards[0];
+        }
+    }
+
+    private void FlipCard()
+    {
+        isFlipped = !isFlipped;
+    }
+
+    private void NextCard()
+    {
+        if (currentCardIndex < totalCards)
+        {
+            currentCardIndex++;
+            currentCard = flashcards[currentCardIndex - 1];
+            isFlipped = false;
+        }
+    }
+
+    private void PreviousCard()
+    {
+        if (currentCardIndex > 1)
+        {
+            currentCardIndex--;
+            currentCard = flashcards[currentCardIndex - 1];
+            isFlipped = false;
+        }
+    }
+
+    private void MarkAsHard()
+    {
+        hardCount++;
+        NextCard();
+    }
+
+    private void MarkAsGood()
+    {
+        goodCount++;
+        NextCard();
+    }
+
+    private void MarkAsEasy()
+    {
+        easyCount++;
+        NextCard();
+    }
+
+    private void GoBack()
+    {
+        NavigationManager.NavigateTo("/studysets");
+    }
+
+    public class Flashcard
+    {
+        public string Question { get; set; }
+        public string Answer { get; set; }
+    }
 }
