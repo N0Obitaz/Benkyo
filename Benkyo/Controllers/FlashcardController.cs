@@ -18,14 +18,14 @@ namespace Benkyo.Controllers
         }
 
         [HttpGet("all")]
-        public async Task<IActionResult> FetchAllFlashcard([FromBody] Flashcard flashcardRequest)
+        public async Task<IActionResult> FetchAllFlashcard()
         {
-            string userId = "test-user-id";
+            string studysetId = "kPVfwn2UxjxW5xmDqLkk";
             try
             {
                 List<Flashcard> flashcards = new();
                 var flashcardRef = _firebaseService._db.Collection("flashcards");
-                var query = flashcardRef.WhereEqualTo("user_id", userId);
+                var query = flashcardRef.WhereEqualTo("studyset_id", studysetId);
                 var snapshot = await query.GetSnapshotAsync();
 
                 foreach(var document in snapshot.Documents)
