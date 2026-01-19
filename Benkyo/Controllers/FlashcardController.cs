@@ -41,6 +41,7 @@ namespace Benkyo.Controllers
                 return Ok(flashcards);
 
             } catch(Exception ex)
+
             {
                 Console.WriteLine(ex.Message);
                 throw new Exception("Error fetcing flashcards", ex);
