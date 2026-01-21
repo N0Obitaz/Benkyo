@@ -96,3 +96,117 @@
 
 
 
+@code {
+    [Parameter]
+    public string? Id { get; set; }
+
+    private string studySetName = "Sample Study Set";
+    private int currentCardIndex = 1;
+    private int totalCards = 0;
+    private bool isFlipped = false;
+    private int hardCount = 0;
+    private int goodCount = 0;
+    private int easyCount = 0;
+
+    private Flashcard currentCard;
+    private List<Flashcard> flashcards = new();
+
+    private string slideState = "center";
+
+    protected override async Task OnInitializedAsync()
+    {
+        studySetName = "Sample Study Set";
+
+        flashcards = await flashcardService.GetStudysetFlashcardAsync(Id);
+
+        totalCards = flashcards.Count;
+        if (flashcards.Any())
+        {
+            currentCard = flashcards[0];
+        }
+    }
+
+
+
+    private string GetCardClass()
+    {
+        return "transition-all duration-500 ease-out";
+    }
+
+    private string GetCardStyle()
+    {
+        if (slideState == "slide-left")
+        {
+            return "transform: translateX(-150%) rotate(-20deg); opacity: 0;";
+        }
+        else if (slideState == "slide-right")
+        {
+            return "transform: translateX(150%) rotate(20deg); opacity: 0;";
+        }
+        return "transform: translateX(0) rotate(0); opacity: 1;";
+    }
+
+    private void FlipCard()
+    {
+        isFlipped = !isFlipped;
+    }
+
+    private async Task SlideCard(string direction)
+    {
+        if (currentCardIndex < totalCards)
+        {
+            // Trigger slide animation
+            slideState = direction;
+            StateHasChanged();
+
+            await Task.Delay(500); // Wait for slide animation
+
+            // Update to next card
+            currentCardIndex++;
+            currentCard = flashcards[currentCardIndex - 1];
+            isFlipped = false;
+            slideState = "center";
+            StateHasChanged();
+        }
+    }
+
+    private async Task MarkAsHard()
+    {
+        hardCount++;
+        await SlideCard("slide-left");
+    }
+
+    private async Task MarkAsGood()
+    {
+        goodCount++;
+        await SlideCard("slide-right");
+    }
+
+    private async Task MarkAsEasy()
+    {
+        easyCount++;
+        await SlideCard("slide-right");
+    }
+
+    private async Task NextCard()
+    {
+        await SlideCard("slide-right");
+    }
+
+    private void PreviousCard()
+    {
+        if (currentCardIndex > 1)
+        {
+            currentCardIndex--;
+            currentCard = flashcards[currentCardIndex - 1];
+            isFlipped = false;
+            StateHasChanged();
+        }
+    }
+
+    private void GoBack()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+
+}
