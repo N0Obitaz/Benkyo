@@ -1,6 +1,7 @@
 ﻿@page "/studysets"
 @rendermode InteractiveWebAssembly
 @inject StudysetService studysetService
+@inject NavigationManager navigationManager
 @inject Studyset studyset
 @inject IJSRuntime runtime
 
@@ -31,7 +32,7 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
         @foreach (var studyset in studysets)
         {
-            <div class="group cursor-pointer bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-slate-200/50 hover:border-slate-300">
+            <div @onclick="() => NavigateToDetails(studyset.Id)" class="group cursor-pointer bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-slate-200/50 hover:border-slate-300">
                 <!-- Colored Header - More Vibrant -->
                 <div class="h-32 relative flex items-end p-5 transition-all duration-300"
                      style="background-color: @(string.IsNullOrEmpty(studyset.StudySetColor) ? "#38bdf8" : studyset.StudySetColor)">
@@ -43,7 +44,7 @@
                             </svg>
                         </button>
                         <!-- Dropdown Menu -->
-                        <div class="absolute right-0 mt-2 w-36 bg-white rounded-lg shadow-lg border border-slate-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10 overflow-hidden">
+                        <div @onclick:stopPropagation="true"  class="absolute right-0 mt-2 w-36 bg-white rounded-lg shadow-lg border border-slate-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10 overflow-hidden">
                             <button @onclick="() => OpenEditModal(studyset)" class="w-full text-left px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 flex items-center gap-2 transition-colors">
                                 <span>✏️</span> Edit
                             </button>
@@ -93,6 +94,11 @@
         // Fetching of studysets
         StateHasChanged();
         studysets = await studysetService.GetUserStudySetAsync();
+    }
+
+    private void NavigateToDetails(string id)
+    {
+        navigationManager.NavigateTo($"/studysets/view/{id}");
     }
 
     private void OpenDeleteModal(Studyset studyset)
