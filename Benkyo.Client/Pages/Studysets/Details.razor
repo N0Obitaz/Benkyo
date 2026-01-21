@@ -96,3 +96,33 @@
 
 
 
+@code {
+    [Parameter]
+    public string? Id { get; set; }
+
+
+
+    private string studySetName = "Sample Study Set";
+    private int currentCardIndex = 1;
+    private int totalCards = 0;
+
+    private Flashcard? currentCard;
+    private List<Flashcard> flashcards = new();
+
+    private string slideState = "center";
+
+    protected override async Task OnInitializedAsync()
+    {
+        studySetName = "Sample Study Set";
+
+        flashcards = await flashcardService.GetStudysetFlashcardAsync(Id);
+
+        totalCards = flashcards.Count;
+        if (flashcards.Any())
+        {
+            currentCard = flashcards[0];
+        }
+    }
+
+
+}
