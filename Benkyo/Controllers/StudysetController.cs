@@ -126,5 +126,30 @@ namespace Benkyo.Controllers
                 throw new Exception($"Error fetching study sets: {ex.Message}");
             }
         }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetCurrentStudyset(string id)
+        {
+
+            var studysetRef = _firebaseService._db.Collection("studysets").Document(id);
+
+            var snapshot = await studysetRef.GetSnapshotAsync();
+
+            if (!snapshot.Exists)
+            {
+                return NotFound($"Studyset with ID :{id} not Found");
+
+
+            }
+
+            var studyset = new Studyset
+            {
+                Id = snapshot.Id,
+                StudySetName = snapshot.GetValue<string>("studyset_name"),
+                StudySetColor = snapshot.GetValue<string>("studyset_color"),
+                UserId = snapshot.GetValue<string>("user_id")
+            };
+
+            return Ok(studyset);
+        }
     }
 }
