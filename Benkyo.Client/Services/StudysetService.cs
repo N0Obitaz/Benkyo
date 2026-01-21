@@ -41,6 +41,30 @@ namespace Benkyo.Client.Services
           return new List<Studyset>();
         }
 
+        public async Task<Studyset> GetCurrentStudysetAsync()
+        {
+            try
+            {
+                using var ht = new HttpClient { BaseAddress = new Uri("https://localhost:7218") };
+
+                var response = await ht.GetStringAsync("api/studyset/current");
+
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+
+                var studyset = JsonSerializer.Deserialize<Studyset>(response, options);
+
+                if (studyset is not null) return studyset;
+            } catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                
+            }
+            return new Studyset();
+        }
+
         public async Task<bool> CreateStudySetAsync(Studyset studyset)
         {
             var response = await _httpClient.PostAsJsonAsync("api/studyset/create", studyset);
