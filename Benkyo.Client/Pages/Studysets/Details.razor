@@ -119,9 +119,15 @@
     {
         studySetName = "Sample Study Set";
 
-        flashcards = await flashcardService.GetStudysetFlashcardAsync(Id);
-
         studyset = await studysetService.GetCurrentStudysetAsync(Id);
+
+        if(studyset.Id != null)
+        {
+            flashcards = await flashcardService.GetStudysetFlashcardAsync(studyset.Id);
+        }
+        
+
+       
 
         totalCards = flashcards.Count;
         if (flashcards.Any())
