@@ -1,6 +1,7 @@
 ﻿@page "/studysets/view/{id}"
 @inject NavigationManager NavigationManager
 @inject FlashcardService flashcardService
+@inject StudysetService studysetService
 @rendermode InteractiveWebAssembly
 
     <div class="flex flex-col min-h-full bg-white text-[#1e293b] font-sans">
@@ -116,6 +117,8 @@
         studySetName = "Sample Study Set";
 
         flashcards = await flashcardService.GetStudysetFlashcardAsync(Id);
+
+        study
 
         totalCards = flashcards.Count;
         if (flashcards.Any())
