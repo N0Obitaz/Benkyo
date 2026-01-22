@@ -37,7 +37,6 @@ namespace Benkyo.Controllers
                     { "studyset_name", request.StudySetName ?? "Untitled Study Set" },
                     { "user_id", request.UserId ?? "test-user-id" },
                     { "studyset_color", request.StudySetColor ?? "blue" },
-                    { "Lessons", request.Lessons ?? new List<Lesson>() }
                 };
 
                 await studysetRef.SetAsync(studysetData);
