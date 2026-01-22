@@ -41,13 +41,13 @@ namespace Benkyo.Client.Services
           return new List<Studyset>();
         }
 
-        public async Task<Studyset> GetCurrentStudysetAsync()
+        public async Task<Studyset> GetCurrentStudysetAsync(string id)
         {
             try
             {
                 using var ht = new HttpClient { BaseAddress = new Uri("https://localhost:7218") };
 
-                var response = await ht.GetStringAsync("api/studyset/current");
+                var response = await ht.GetStringAsync($"api/studyset/{id}");
 
                 var options = new JsonSerializerOptions
                 {
@@ -56,7 +56,12 @@ namespace Benkyo.Client.Services
 
                 var studyset = JsonSerializer.Deserialize<Studyset>(response, options);
 
-                if (studyset is not null) return studyset;
+                if (studyset is not null)
+                {
+                    Console.WriteLine("Current Studyset Successully fetched");
+                    return studyset;
+                }
+
             } catch(Exception ex)
             {
                 Console.WriteLine(ex.Message);

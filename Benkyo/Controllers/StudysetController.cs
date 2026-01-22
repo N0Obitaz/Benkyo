@@ -21,7 +21,7 @@ namespace Benkyo.Controllers
         [HttpPost("create")]
         public async Task<IActionResult> CreateStudySet([FromBody] Studyset request)
         {
-            Console.WriteLine("You're here na");
+            
             
             try
             {
@@ -128,27 +128,33 @@ namespace Benkyo.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCurrentStudyset(string id)
         {
-
-            var studysetRef = _firebaseService._db.Collection("studysets").Document(id);
-
-            var snapshot = await studysetRef.GetSnapshotAsync();
-
-            if (!snapshot.Exists)
+            try
             {
-                return NotFound($"Studyset with ID :{id} not Found");
+                var studysetRef = _firebaseService._db.Collection("studysets").Document(id);
+
+                var snapshot = await studysetRef.GetSnapshotAsync();
+
+                if (!snapshot.Exists)
+                {
+                    return NotFound($"Studyset with ID :{id} not Found");
 
 
+                }
+
+                var studyset = new Studyset
+                {
+                    Id = snapshot.Id,
+                    StudySetName = snapshot.GetValue<string>("studyset_name"),
+                    StudySetColor = snapshot.GetValue<string>("studyset_color"),
+                    UserId = snapshot.GetValue<string>("user_id")
+                };
+
+                return Ok(studyset);
+            }catch (Exception ex)
+            {
+                throw new Exception("Error Fetching current studyset");
             }
-
-            var studyset = new Studyset
-            {
-                Id = snapshot.Id,
-                StudySetName = snapshot.GetValue<string>("studyset_name"),
-                StudySetColor = snapshot.GetValue<string>("studyset_color"),
-                UserId = snapshot.GetValue<string>("user_id")
-            };
-
-            return Ok(studyset);
+           
         }
     }
 }
