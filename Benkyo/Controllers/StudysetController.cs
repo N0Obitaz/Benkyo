@@ -21,7 +21,7 @@ namespace Benkyo.Controllers
         [HttpPost("create")]
         public async Task<IActionResult> CreateStudySet([FromBody] Studyset request)
         {
-            Console.WriteLine("You're here na");
+            
             
             try
             {
