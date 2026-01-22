@@ -1,8 +1,12 @@
 ﻿<h3>AddFlashcard</h3>
 @inject FlashcardService flashcardService
+@inject Flashcard flashcard
 
 
 @code {
-
+    private async Task CreateFlashcard()
+    {
+        await flashcardService.CreateFlashcardAsync(flashcard);
+    }
 	
 }
