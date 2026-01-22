@@ -56,7 +56,12 @@ namespace Benkyo.Client.Services
 
                 var studyset = JsonSerializer.Deserialize<Studyset>(response, options);
 
-                if (studyset is not null) return studyset;
+                if (studyset is not null)
+                {
+                    Console.WriteLine("Current Studyset Successully fetched");
+                    return studyset;
+                }
+
             } catch(Exception ex)
             {
                 Console.WriteLine(ex.Message);
