@@ -1,5 +1,12 @@
-﻿<h3>AddFlashcard</h3>
+﻿@inject FlashcardService flashcardService
+@inject Flashcard flashcard
+
+<h3>AddFlashcard</h3>
 
 @code {
 
+	private async Task DeleteFlashcard()
+	{
+		await flashcardService.DeleteFlashcardAsync(flashcard);
+	}
 }

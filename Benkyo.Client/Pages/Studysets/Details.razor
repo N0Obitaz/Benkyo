@@ -3,6 +3,7 @@
 @inject FlashcardService flashcardService
 @inject StudysetService studysetService
 @inject Studyset studyset
+@inject Flashcard flashcard
 @rendermode InteractiveWebAssembly
 
     <div class="flex flex-col min-h-full bg-white text-[#1e293b] font-sans">
@@ -11,7 +12,7 @@
             <button class="text-slate-400 hover:text-[#0f172a] transition">
                 <i class="bi bi-arrow-left text-lg"></i>
             </button>
-            <h1 class="text-lg font-bold text-[#0f172a]">APPDEV FINALS</h1>
+            <h1 class="text-lg font-bold text-[#0f172a]">@studyset.StudySetName</h1>
         </div>
 
         <div class="bg-slate-100 p-1 rounded-full flex items-center">
@@ -28,7 +29,7 @@
     <div class="p-8 space-y-10 bg-slate-50/30 flex-1">
 
         <div class="flex items-center space-x-4 max-w-5xl mx-auto">
-            <button class="flex-1 py-4 border-2 border-dashed border-slate-200 rounded-2xl text-slate-400 font-semibold hover:border-slate-300 hover:bg-white transition-all">
+            <button @onclick="AddFlashcard"class="flex-1 py-4 border-2 border-dashed border-slate-200 rounded-2xl text-slate-400 font-semibold hover:border-slate-300 hover:bg-white transition-all">
                 + Add material
             </button>
             <button class="flex-1 py-4 bg-[#0f172a] text-white font-bold rounded-2xl flex items-center justify-center space-x-2 hover:bg-black transition-shadow shadow-sm">
@@ -119,9 +120,15 @@
     {
         studySetName = "Sample Study Set";
 
-        flashcards = await flashcardService.GetStudysetFlashcardAsync(Id);
-
         studyset = await studysetService.GetCurrentStudysetAsync(Id);
+
+        if(studyset.Id != null)
+        {
+            flashcards = await flashcardService.GetStudysetFlashcardAsync(studyset.Id);
+        }
+
+
+
 
         totalCards = flashcards.Count;
         if (flashcards.Any())
@@ -129,6 +136,6 @@
             currentCard = flashcards[0];
         }
     }
-
+   
 
 }
