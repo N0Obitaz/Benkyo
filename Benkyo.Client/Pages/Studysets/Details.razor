@@ -126,10 +126,6 @@
         {
             flashcards = await flashcardService.GetStudysetFlashcardAsync(studyset.Id);
         }
-
-
-
-
         totalCards = flashcards.Count;
         if (flashcards.Any())
         {
@@ -139,7 +135,7 @@
 
     private async Task AddFlashcard()
     {
-        await flashcardService.CreateFlashcardAsync();
+        
     }
 
 
