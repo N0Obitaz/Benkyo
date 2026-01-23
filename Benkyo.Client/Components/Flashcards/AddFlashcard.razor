@@ -1,5 +1,4 @@
 ﻿@inject FlashcardService flashcardService
-@inject Flashcard flashcard
 @rendermode InteractiveWebAssembly
 
 
@@ -18,6 +17,8 @@
     [Parameter] public string? StudysetId { get; set; }
 
     [Parameter] public EventCallback OnFlashcardAdded { get; set; }
+
+    private Flashcard? flashcard = new();
     private async Task CreateFlashcard()
     {
         if (string.IsNullOrEmpty(StudysetId)) return;
