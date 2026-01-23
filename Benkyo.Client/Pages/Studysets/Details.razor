@@ -130,13 +130,19 @@
 
     private string slideState = "center";
 
+
     protected override async Task OnInitializedAsync()
+    {
+        await RefreshFlashcards();
+    }
+
+    private async Task RefreshFlashcards()
     {
         studySetName = "Sample Study Set";
 
         studyset = await studysetService.GetCurrentStudysetAsync(Id);
 
-        if(studyset.Id != null)
+        if (studyset.Id != null)
         {
             flashcards = await flashcardService.GetStudysetFlashcardAsync(studyset.Id);
         }
