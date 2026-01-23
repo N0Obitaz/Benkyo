@@ -40,6 +40,7 @@ builder.Services.AddTransient<User>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<StudysetService>();
 builder.Services.AddScoped<Studyset>();
+builder.Services.AddScoped<Flashcard>();
 builder.Services.AddScoped<FlashcardService>();
 builder.Services.AddScoped<ColorOption>();
 builder.Services.AddScoped<ColorOptions>();

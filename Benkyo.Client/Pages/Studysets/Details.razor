@@ -2,8 +2,6 @@
 @inject NavigationManager NavigationManager
 @inject FlashcardService flashcardService
 @inject StudysetService studysetService
-@inject Studyset studyset
-@inject Flashcard flashcard
 @rendermode InteractiveWebAssembly
 
     <div class="flex flex-col min-h-full bg-white text-[#1e293b] font-sans">
@@ -108,7 +106,7 @@
             </div>
 
             @* Pass the StudysetId and the Callback method *@
-            <AddFlashcard StudysetId="@Id" OnFlashcardAdded="RefreshFlashcards" />
+            <Benkyo.Client.Components.Flashcards.AddFlashcard StudysetId="@Id" OnFlashcardAdded="RefreshFlashcards" />
         </div>
     </div>
 }
@@ -117,6 +115,8 @@
     [Parameter]
     public string? Id { get; set; }
 
+    private bool isModalOpen = false;
+
 
 
     private string studySetName = "Sample Study Set";
@@ -124,7 +124,7 @@
     private int totalCards = 0;
 
 
-
+    private Studyset? studyset = new();
     private Flashcard? currentCard;
     private List<Flashcard> flashcards = new();
 
@@ -153,10 +153,7 @@
         }
     }
 
-    private async Task AddFlashcard()
-    {
-        
-    }
+  
 
 
 }
