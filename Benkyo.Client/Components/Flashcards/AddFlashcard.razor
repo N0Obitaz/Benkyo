@@ -12,6 +12,10 @@
 </div>
 
 @code {
+
+    [Parameter] public string? StudysetId { get; set; }
+
+    [Parameter] public EventCallback OnFlashcardAdded { get; set; }
     private async Task CreateFlashcard()
     {
         await flashcardService.CreateFlashcardAsync(flashcard);
