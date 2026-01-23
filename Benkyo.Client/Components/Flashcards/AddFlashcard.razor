@@ -18,7 +18,17 @@
     [Parameter] public EventCallback OnFlashcardAdded { get; set; }
     private async Task CreateFlashcard()
     {
+        if (string.IsNullOrEmpty(StudysetId)) return;
+
+        flashcard.StudysetId = StudysetId;
+
         await flashcardService.CreateFlashcardAsync(flashcard);
+
+        
+        await OnFlashcardAdded.InvokeAsync();
+
+        
+        flashcard = new();
     }
 	
 }
