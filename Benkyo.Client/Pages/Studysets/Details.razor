@@ -29,9 +29,10 @@
     <div class="p-8 space-y-10 bg-slate-50/30 flex-1">
 
         <div class="flex items-center space-x-4 max-w-5xl mx-auto">
-            <button @onclick="AddFlashcard"class="flex-1 py-4 border-2 border-dashed border-slate-200 rounded-2xl text-slate-400 font-semibold hover:border-slate-300 hover:bg-white transition-all">
-                + Add material
-            </button>
+            <button @onclick="() => isModalOpen = true" 
+            class="w-full py-4 border-2 border-dashed border-slate-200 rounded-2xl text-slate-400 font-semibold hover:bg-slate-50 transition">
+        + Add material
+    </button>
             <button class="flex-1 py-4 bg-[#0f172a] text-white font-bold rounded-2xl flex items-center justify-center space-x-2 hover:bg-black transition-shadow shadow-sm">
                 <i class="bi bi-play-fill text-xl"></i>
                 <span>Learn @flashcards.Count flashcards</span>
