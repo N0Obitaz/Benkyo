@@ -29,7 +29,8 @@
     <div class="p-8 space-y-10 bg-slate-50/30 flex-1">
 
         <div class="flex items-center space-x-4 max-w-5xl mx-auto">
-            <button @onclick="AddFlashcard"class="flex-1 py-4 border-2 border-dashed border-slate-200 rounded-2xl text-slate-400 font-semibold hover:border-slate-300 hover:bg-white transition-all">
+            <button @onclick="() => isModalOpen = true"
+                    class="w-full py-4 border-2 border-dashed border-slate-200 rounded-2xl text-slate-400 font-semibold hover:bg-slate-50 transition">
                 + Add material
             </button>
             <button class="flex-1 py-4 bg-[#0f172a] text-white font-bold rounded-2xl flex items-center justify-center space-x-2 hover:bg-black transition-shadow shadow-sm">
@@ -97,7 +98,20 @@
     </div>
 </div>
 
+@if (isModalOpen)
+{
+    <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+        <div class="bg-white p-6 rounded-3xl shadow-xl w-full max-w-md">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="font-bold text-lg">Add New Flashcard</h2>
+                <button @onclick="() => isModalOpen = false" class="text-slate-400">✕</button>
+            </div>
 
+            @* Pass the StudysetId and the Callback method *@
+            <AddFlashcard StudysetId="@Id" OnFlashcardAdded="RefreshFlashcards" />
+        </div>
+    </div>
+}
 
 @code {
     [Parameter]
@@ -116,20 +130,22 @@
 
     private string slideState = "center";
 
+
     protected override async Task OnInitializedAsync()
+    {
+        await RefreshFlashcards();
+    }
+
+    private async Task RefreshFlashcards()
     {
         studySetName = "Sample Study Set";
 
         studyset = await studysetService.GetCurrentStudysetAsync(Id);
 
-        if(studyset.Id != null)
+        if (studyset.Id != null)
         {
             flashcards = await flashcardService.GetStudysetFlashcardAsync(studyset.Id);
         }
-
-
-
-
         totalCards = flashcards.Count;
         if (flashcards.Any())
         {
@@ -139,7 +155,7 @@
 
     private async Task AddFlashcard()
     {
-        await flashcardService.CreateFlashcardAsync();
+        
     }
 
 

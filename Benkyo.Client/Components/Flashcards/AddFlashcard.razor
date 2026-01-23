@@ -2,11 +2,33 @@
 @inject FlashcardService flashcardService
 @inject Flashcard flashcard
 
+<div class="space-y-4 p-4">
+    <input @bind="flashcard.Question" placeholder="Question" class="w-full p-2 border rounded" />
+    <input @bind="flashcard.Answer" placeholder="Answer" class="w-full p-2 border rounded" />
+
+    <button @onclick="CreateFlashcard" class="bg-blue-500 text-white px-4 py-2 rounded">
+        Save Flashcard
+    </button>
+</div>
 
 @code {
+
+    [Parameter] public string? StudysetId { get; set; }
+
+    [Parameter] public EventCallback OnFlashcardAdded { get; set; }
     private async Task CreateFlashcard()
     {
+        if (string.IsNullOrEmpty(StudysetId)) return;
+
+        flashcard.StudysetId = StudysetId;
+
         await flashcardService.CreateFlashcardAsync(flashcard);
+
+        
+        await OnFlashcardAdded.InvokeAsync();
+
+        
+        flashcard = new();
     }
 	
 }
