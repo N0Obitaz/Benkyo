@@ -1,6 +1,9 @@
-﻿<h3>AddFlashcard</h3>
-@inject FlashcardService flashcardService
+﻿@inject FlashcardService flashcardService
 @inject Flashcard flashcard
+@rendermode InteractiveWebAssembly
+
+<h3>AddFlashcard</h3>
+
 
 <div class="space-y-4 p-4">
     <input @bind="flashcard.Question" placeholder="Question" class="w-full p-2 border rounded" />
