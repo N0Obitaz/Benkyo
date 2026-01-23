@@ -136,6 +136,11 @@
             currentCard = flashcards[0];
         }
     }
-   
+
+    private async Task AddFlashcard()
+    {
+        await flashcardService.CreateFlashcardAsync();
+    }
+
 
 }
