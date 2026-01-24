@@ -8,6 +8,9 @@ namespace Benkyo.Client.Services
     {
         private readonly HttpClient _httpClient;
 
+        private HttpClient ht = new HttpClient { BaseAddress = new Uri("https://localhost:7218") };
+}
+
         public FlashcardService(HttpClient httpClient)
         {
             _httpClient = httpClient;
@@ -57,6 +60,11 @@ namespace Benkyo.Client.Services
             var response = await _httpClient.PostAsJsonAsync("api/flashcard/create", flashcard);
 
             return response.IsSuccessStatusCode;
+        }
+
+        public async Task<int> CountFlashcardAsync(string studentId)
+        {
+            var response = await                                                                                                                  
         }
     }
 }
