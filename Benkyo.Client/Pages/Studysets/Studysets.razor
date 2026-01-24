@@ -2,6 +2,7 @@
 @rendermode InteractiveWebAssembly
 @inject StudysetService studysetService
 @inject NavigationManager navigationManager
+@inject FlashcardService flashcardService
 @inject Studyset studyset
 @inject IJSRuntime runtime
 
@@ -121,6 +122,7 @@
 
     private async Task CardCount(string id)
     {
-        // Call await function to flashcardService using id
+        await flashcardService.CountFlashcardAsync(id);
+
     }
 }
