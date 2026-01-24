@@ -127,6 +127,13 @@ namespace Benkyo.Controllers
                 };
             }
         }
+        [HttpGet("count")]
+        public async Task<IActionResult> CountFlashcards()
+        {
+            int count = 0;
+
+            return count;
+        }
 
     }
 }
