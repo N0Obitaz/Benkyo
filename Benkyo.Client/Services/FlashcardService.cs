@@ -70,6 +70,8 @@ namespace Benkyo.Client.Services
             {
                 PropertyNameCaseInsensitive = true
             };
+
+            return 0;
         }
     }
 }
