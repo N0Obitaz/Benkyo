@@ -134,7 +134,7 @@ namespace Benkyo.Controllers
 
             var flashcardRef = _firebaseService._db.Collection("flashcards");
 
-            
+            var query = flashcardRef.WhereEqualTo("studyset_id", id);
 
             // Count 
             return Ok(count);
