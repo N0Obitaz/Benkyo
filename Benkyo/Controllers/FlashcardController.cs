@@ -1,4 +1,5 @@
 ﻿using Benkyo.Services;
+using Google.Cloud.Firestore;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Models;
 
@@ -136,8 +137,12 @@ namespace Benkyo.Controllers
 
             var query = flashcardRef.WhereEqualTo("studyset_id", id);
 
-            // Count 
-            return Ok(count);
+            AggregateQuery countQuery = query.Count();
+            var snapshot = await countQuery.GetSnapshotAsync();
+
+            return Ok(snapshot.Count ?? 0);
+
+            
 
         }
 
