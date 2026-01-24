@@ -21,7 +21,7 @@ namespace Benkyo.Client.Services
             try
             {
 
-                using var ht = new HttpClient { BaseAddress = new Uri( "https://localhost:7218" ) };
+               
 
                 var response = await ht.GetStringAsync("api/flashcard/all");
 
@@ -64,7 +64,12 @@ namespace Benkyo.Client.Services
 
         public async Task<int> CountFlashcardAsync(string studentId)
         {
-            var response = await                                                                                                                  
+            var response = await ht.GetStringAsync($"api/flashcard/count{studentId}");
+
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
         }
     }
 }
