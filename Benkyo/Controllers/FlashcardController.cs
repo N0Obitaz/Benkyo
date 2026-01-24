@@ -131,8 +131,8 @@ namespace Benkyo.Controllers
         public async Task<IActionResult> CountFlashcards()
         {
             int count = 0;
+            return Ok(count);
 
-            return count;
         }
 
     }
