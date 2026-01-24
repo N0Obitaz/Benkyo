@@ -142,7 +142,6 @@ namespace Benkyo.Controllers
 
             return Ok(snapshot.Count ?? 0);
 
-            
 
         }
 
