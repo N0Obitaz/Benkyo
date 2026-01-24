@@ -62,8 +62,8 @@
                         @studyset.StudySetName
                     </h2>
                     <p class="text-slate-500 text-sm font-medium">
-                        @* @studyset.CardCount cards *@
-                        0 cards
+                        @studyset. cards
+                        
                     </p>
                 </div>
             </div>
@@ -106,7 +106,7 @@
         selectedStudyset = studyset;
         _isDeleteModalOpen = true;
     }
-    
+
     private async Task OpenAddModal()
     {
 
@@ -117,5 +117,10 @@
     {
         selectedStudyset = studyset;
         _isEditModalOpen = true;
+    }
+
+    private async Task CardCount(string id)
+    {
+        // Call await function to flashcardService using id
     }
 }

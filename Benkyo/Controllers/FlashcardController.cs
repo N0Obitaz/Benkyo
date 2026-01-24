@@ -1,4 +1,5 @@
 ﻿using Benkyo.Services;
+using Google.Cloud.Firestore;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Models;
 
@@ -10,7 +11,7 @@ namespace Benkyo.Controllers
     {
 
         private readonly FirebaseService _firebaseService;
-        
+
 
         public FlashcardController(FirebaseService firebaseService)
         {
@@ -28,7 +29,7 @@ namespace Benkyo.Controllers
                 var query = flashcardRef.WhereEqualTo("studyset_id", studysetId);
                 var snapshot = await query.GetSnapshotAsync();
 
-                foreach(var document in snapshot.Documents)
+                foreach (var document in snapshot.Documents)
                 {
                     flashcards.Add(new Flashcard
                     {
@@ -40,7 +41,7 @@ namespace Benkyo.Controllers
                 }
                 return Ok(flashcards);
 
-            } catch(Exception ex)
+            } catch (Exception ex)
 
             {
                 Console.WriteLine(ex.Message);
@@ -64,8 +65,8 @@ namespace Benkyo.Controllers
                     { "Question", flashcardRequest.Question ?? "No Question" },
                     { "Answer", flashcardRequest.Answer ?? "No Answer" }
                 };
-                    await flashcardRef.SetAsync(flashCardData);
-                    return Ok(new { Message = "Flashcard Created" });
+                await flashcardRef.SetAsync(flashCardData);
+                return Ok(new { Message = "Flashcard Created" });
             }
             catch (Exception ex)
             {
@@ -78,10 +79,10 @@ namespace Benkyo.Controllers
         {
             try
             {
-                
-                    var flashcardRef = _firebaseService._db.Collection("flashcards").Document(flashcardRequest.Id);
 
-                    var flashcardData = new Dictionary<string, object>
+                var flashcardRef = _firebaseService._db.Collection("flashcards").Document(flashcardRequest.Id);
+
+                var flashcardData = new Dictionary<string, object>
                     {
 
                          {"question", flashcardRequest.Question! },
@@ -89,14 +90,14 @@ namespace Benkyo.Controllers
 
 
                     };
-                    await flashcardRef.UpdateAsync(flashcardData);
+                await flashcardRef.UpdateAsync(flashcardData);
 
-                    return Ok(new { Message = "Flashcard updated!" });
-           
+                return Ok(new { Message = "Flashcard updated!" });
 
-          
-               
-            }catch(Exception ex)
+
+
+
+            } catch (Exception ex)
             {
 
                 throw new Exception("Error Deleting Flashcard", ex);
@@ -108,24 +109,41 @@ namespace Benkyo.Controllers
         {
             try
             {
-                
-                    var flashcardRef = _firebaseService._db.Collection("flashcards").Document(flashcardRequest.Id);
 
-                    await flashcardRef.DeleteAsync();
+                var flashcardRef = _firebaseService._db.Collection("flashcards").Document(flashcardRequest.Id);
 
-                    return Ok(new { Message = "Flashcard Deleted!" });
-               
+                await flashcardRef.DeleteAsync();
 
-                   
+                return Ok(new { Message = "Flashcard Deleted!" });
+
+
+
             }
             catch (Exception ex)
             {
 
                 throw new Exception("Error Deleting Flashcard", ex);
-{
+                {
 
                 };
             }
+        }
+        [HttpGet("count/{id}")]
+        public async Task<IActionResult> CountFlashcards(string id)
+        {
+            int count = 0;
+
+            var flashcardRef = _firebaseService._db.Collection("flashcards");
+
+            var query = flashcardRef.WhereEqualTo("studyset_id", id);
+
+            AggregateQuery countQuery = query.Count();
+            var snapshot = await countQuery.GetSnapshotAsync();
+
+            return Ok(snapshot.Count ?? 0);
+
+            
+
         }
 
     }
