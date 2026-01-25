@@ -9,7 +9,7 @@ namespace Benkyo.Client.Services
         private readonly HttpClient _httpClient;
 
         private HttpClient ht = new HttpClient { BaseAddress = new Uri("https://localhost:7218") };
-}
+
 
         public FlashcardService(HttpClient httpClient)
         {
