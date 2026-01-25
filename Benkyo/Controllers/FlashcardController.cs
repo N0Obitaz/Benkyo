@@ -1,4 +1,6 @@
-﻿using Benkyo.Services;
+﻿using System.Numerics;
+using System.Runtime.InteropServices.ObjectiveC;
+using Benkyo.Services;
 using Google.Cloud.Firestore;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Models;
@@ -49,7 +51,25 @@ namespace Benkyo.Controllers
             }
         }
 
-       
+        private async Task UpdateTotalFlashcard(string studysetId, string operation)
+        {
+
+            var studysetRef = _firebaseService._db.Collection("studysets").Document(studysetId);
+
+
+            var snapshot = await studysetRef.GetSnapshotAsync();
+
+            int total = snapshot.GetValue<int>("total_flashcards");
+
+            int newTotalFlashcards = (operation == "add") ? total++ : total--;
+            var flashcardData = new Dictionary<string, object>
+            {
+                {"total_flashcards",  newTotalFlashcards}
+            };
+
+            await studysetRef.UpdateAsync(flashcardData);
+        }
+
 
         [HttpPost("create")]
         public async Task<IActionResult> CreateFlashcard([FromBody] Flashcard flashcardRequest)
@@ -66,9 +86,12 @@ namespace Benkyo.Controllers
                     { "Question", flashcardRequest.Question ?? "No Question" },
                     { "Answer", flashcardRequest.Answer ?? "No Answer" }
                 };
+                // update 
                 await flashcardRef.SetAsync(flashCardData);
 
-                // update 
+               // Update TotalFlashcards on based on studyset
+
+                
                 return Ok(new { Message = "Flashcard Created" });
             }
             catch (Exception ex)
