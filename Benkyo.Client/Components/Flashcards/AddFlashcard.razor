@@ -21,6 +21,7 @@
     private Flashcard? flashcard = new();
     private async Task CreateFlashcard()
     {
+        Console.WriteLine($"Here you are {flashcard.StudysetId}");
         if (string.IsNullOrEmpty(StudysetId)) return;
 
         flashcard.StudysetId = StudysetId;
