@@ -63,7 +63,7 @@
                         @studyset.StudySetName
                     </h2>
                     <p class="text-slate-500 text-sm font-medium">
-                        @studyset. cards
+                        @cardCount cards
                         
                     </p>
                 </div>
@@ -84,6 +84,8 @@
     private bool _isEditModalOpen { get; set;  }
     private bool _isDeleteModalOpen = false;
 
+    private int cardCount = 0;
+
     private Studyset? selectedStudyset;
 
 
@@ -94,6 +96,8 @@
     {
         // Fetching of studysets
         StateHasChanged();
+
+        await CardCount(studyset.Id);
         studysets = await studysetService.GetUserStudySetAsync();
     }
 
@@ -122,7 +126,12 @@
 
     private async Task CardCount(string id)
     {
-        await flashcardService.CountFlashcardAsync(id);
+
+        if(!string.IsNullOrEmpty(id))
+        {
+            cardCount = await flashcardService.CountFlashcardAsync(id);
+        }
+       
 
     }
 }
