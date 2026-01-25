@@ -9,7 +9,7 @@ namespace Benkyo.Client.Services
         private readonly HttpClient _httpClient;
 
         private HttpClient ht = new HttpClient { BaseAddress = new Uri("https://localhost:7218") };
-}
+
 
         public FlashcardService(HttpClient httpClient)
         {
@@ -62,14 +62,24 @@ namespace Benkyo.Client.Services
             return response.IsSuccessStatusCode;
         }
 
-        public async Task<int> CountFlashcardAsync(string studentId)
+        public async Task<int> CountFlashcardAsync(string studysetId)
         {
-            var response = await ht.GetStringAsync($"api/flashcard/count{studentId}");
-
-            var options = new JsonSerializerOptions
+            try
             {
-                PropertyNameCaseInsensitive = true
-            };
+                Console.WriteLine($"Id is  " + studysetId);
+                var response = await ht.GetStringAsync($"api/flashcard/count{studysetId}");
+
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+
+                var converted = JsonSerializer.Deserialize<int>(response, options);
+            }catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            
 
             return 0;
         }

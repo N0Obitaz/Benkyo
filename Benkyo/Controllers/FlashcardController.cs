@@ -1,4 +1,6 @@
-﻿using Benkyo.Services;
+﻿using System.Numerics;
+using System.Runtime.InteropServices.ObjectiveC;
+using Benkyo.Services;
 using Google.Cloud.Firestore;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Models;
@@ -45,8 +47,33 @@ namespace Benkyo.Controllers
 
             {
                 Console.WriteLine(ex.Message);
-                throw new Exception("Error fetcing flashcards", ex);
+                throw new Exception(ex.Message);
             }
+        }
+
+        private async Task UpdateTotalFlashcard(string studysetId, string operation)
+        {
+            try
+            {
+                    var studysetRef = _firebaseService._db.Collection("studysets").Document(studysetId);
+
+
+                    var snapshot = await studysetRef.GetSnapshotAsync();
+
+                    int total = snapshot.GetValue<int>("total_flashcards");
+
+                    int newTotalFlashcards = (operation == "add") ? total++ : total--;
+                    var flashcardData = new Dictionary<string, object>
+                {
+                    {"total_flashcards",  newTotalFlashcards}
+                };
+
+                await studysetRef.UpdateAsync(flashcardData);
+            }catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+          
         }
 
 
@@ -55,6 +82,7 @@ namespace Benkyo.Controllers
         {
             try
             {
+                if (flashcardRequest.StudysetId == null) return BadRequest( new {Message = "Studyset Id reference not fount"});
 
                 // Doesn't need to check for existing flashcards since they can be duplicated in different lessons
 
@@ -62,10 +90,19 @@ namespace Benkyo.Controllers
 
                 var flashCardData = new Dictionary<string, object>
                 {
-                    { "Question", flashcardRequest.Question ?? "No Question" },
-                    { "Answer", flashcardRequest.Answer ?? "No Answer" }
+                    { "question", flashcardRequest.Question ?? "No Question" },
+                    { "answer", flashcardRequest.Answer ?? "No Answer" },
+                    { "studyset_id", flashcardRequest.StudysetId },
+                    { "tag", flashcardRequest.Tag ?? "No Tag"},
                 };
+                // update 
                 await flashcardRef.SetAsync(flashCardData);
+
+                await UpdateTotalFlashcard(flashcardRequest.StudysetId, "add");
+
+               // Update TotalFlashcards on based on studyset
+
+                
                 return Ok(new { Message = "Flashcard Created" });
             }
             catch (Exception ex)
@@ -131,8 +168,8 @@ namespace Benkyo.Controllers
         [HttpGet("count/{id}")]
         public async Task<IActionResult> CountFlashcards(string id)
         {
-            int count = 0;
 
+            Console.WriteLine("You're here na");
             var flashcardRef = _firebaseService._db.Collection("flashcards");
 
             var query = flashcardRef.WhereEqualTo("studyset_id", id);
@@ -140,7 +177,7 @@ namespace Benkyo.Controllers
             AggregateQuery countQuery = query.Count();
             var snapshot = await countQuery.GetSnapshotAsync();
 
-            return Ok(snapshot.Count ?? 0);
+            return Ok(new { totalCards = snapshot.Count ?? 0 });
 
 
         }
