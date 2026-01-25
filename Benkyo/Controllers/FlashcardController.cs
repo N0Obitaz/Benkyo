@@ -49,6 +49,7 @@ namespace Benkyo.Controllers
             }
         }
 
+       
 
         [HttpPost("create")]
         public async Task<IActionResult> CreateFlashcard([FromBody] Flashcard flashcardRequest)
@@ -66,6 +67,8 @@ namespace Benkyo.Controllers
                     { "Answer", flashcardRequest.Answer ?? "No Answer" }
                 };
                 await flashcardRef.SetAsync(flashCardData);
+
+                // update 
                 return Ok(new { Message = "Flashcard Created" });
             }
             catch (Exception ex)
@@ -131,8 +134,8 @@ namespace Benkyo.Controllers
         [HttpGet("count/{id}")]
         public async Task<IActionResult> CountFlashcards(string id)
         {
-            int count = 0;
 
+            Console.WriteLine("You're here na");
             var flashcardRef = _firebaseService._db.Collection("flashcards");
 
             var query = flashcardRef.WhereEqualTo("studyset_id", id);
@@ -140,7 +143,7 @@ namespace Benkyo.Controllers
             AggregateQuery countQuery = query.Count();
             var snapshot = await countQuery.GetSnapshotAsync();
 
-            return Ok(snapshot.Count ?? 0);
+            return Ok(new { totalCards = snapshot.Count ?? 0 });
 
 
         }
