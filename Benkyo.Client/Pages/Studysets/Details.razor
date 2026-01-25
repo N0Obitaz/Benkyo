@@ -1,27 +1,27 @@
 ﻿@page "/studysets/view/{id}"
-@inject NavigationManager NavigationManager
+@inject NavigationManager navigationManager
 @inject FlashcardService flashcardService
 @inject StudysetService studysetService
 @rendermode InteractiveWebAssembly
 
-    <div class="flex flex-col min-h-full bg-white text-[#1e293b] font-sans">
-    <div class="h-16 border-b border-slate-100 flex items-center justify-between px-8 bg-white sticky top-0 z-10">
-        <div class="flex items-center space-x-4">
-            <button class="text-slate-400 hover:text-[#0f172a] transition">
-                <i class="bi bi-arrow-left text-lg"></i>
-            </button>
-            <h1 class="text-lg font-bold text-[#0f172a]">@studyset.StudySetName</h1>
-        </div>
+<div class="flex flex-col min-h-full bg-white text-[#1e293b] font-sans">
+        <div class="h-16 border-b border-slate-100 flex items-center justify-between px-8 bg-white sticky top-0 z-10">
+            <div class="flex items-center space-x-4">
+                <button class="text-slate-400 hover:text-[#0f172a] transition">
+                    <i class="bi bi-arrow-left text-lg"></i>
+                </button>
+                <h1 class="text-lg font-bold text-[#0f172a]">@studyset.StudySetName</h1>
+            </div>
 
-        <div class="bg-slate-100 p-1 rounded-full flex items-center">
-            <button class="px-6 py-1.5 rounded-full text-sm font-bold bg-white shadow-sm text-[#0f172a]">Material</button>
-            <button class="px-6 py-1.5 rounded-full text-sm font-medium text-slate-500 hover:text-slate-700">Study Plan</button>
-        </div>
+            <div class="bg-slate-100 p-1 rounded-full flex items-center">
+                <button class="px-6 py-1.5 rounded-full text-sm font-bold bg-white shadow-sm text-[#0f172a]">Material</button>
+                <button class="px-6 py-1.5 rounded-full text-sm font-medium text-slate-500 hover:text-slate-700">Study Plan</button>
+            </div>
 
-        <div class="flex items-center space-x-3">
-            <button class="px-4 py-1.5 border border-slate-200 rounded-xl text-sm font-medium hover:bg-slate-50 transition">Share</button>
-            <button class="text-slate-400 hover:text-slate-600"><i class="bi bi-three-dots-vertical"></i></button>
-        </div>
+            <div class="flex items-center space-x-3">
+                <button class="px-4 py-1.5 border border-slate-200 rounded-xl text-sm font-medium hover:bg-slate-50 transition">Share</button>
+                <button class="text-slate-400 hover:text-slate-600"><i class="bi bi-three-dots-vertical"></i></button>
+            </div>
     </div>
 
     <div class="p-8 space-y-10 bg-slate-50/30 flex-1">
@@ -31,7 +31,7 @@
                     class="flex-1 py-4 border-2 border-dashed border-slate-200 rounded-2xl text-slate-400 font-semibold hover:bg-slate-50 transition">
                 + Add material
             </button>
-            <button class="flex-1 py-4 bg-[#0f172a] text-white font-bold rounded-2xl flex items-center justify-center space-x-2 hover:bg-black transition-shadow shadow-sm">
+            <button @onclick="NavigateToLearn" class="flex-1 py-4 bg-[#0f172a] text-white font-bold rounded-2xl flex items-center justify-center space-x-2 hover:bg-black transition-shadow shadow-sm">
                 <i class="bi bi-play-fill text-xl"></i>
                 <span>Learn @flashcards.Count flashcards</span>
             </button>
@@ -44,21 +44,21 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-@foreach (var card in flashcards.Take(3))
-{
-                        <div class="bg-white border border-slate-200 p-6 rounded-[2rem] shadow-sm hover:border-blue-400 transition-all cursor-pointer group">
-                            <div class="flex items-start justify-between mb-4">
-                                <span class="text-[10px] font-bold text-blue-600 uppercase tracking-tight flex items-center bg-blue-50 px-2 py-1 rounded">
-                                    <i class="bi bi-file-earmark-pdf mr-1"></i> Unit_6_App...
-                                </span>
-                                <i class="bi bi-stars text-blue-500/30 group-hover:text-blue-500"></i>
-                            </div>
-                            <p class="text-[15px] font-medium text-slate-800 leading-snug">@card.Question</p>
-                            <div class="mt-6 flex justify-end text-slate-300">
-                                <i class="bi bi-three-dots"></i>
-                            </div>
+                @foreach (var card in flashcards.Take(3))
+                {
+                    <div class="bg-white border border-slate-200 p-6 rounded-[2rem] shadow-sm hover:border-blue-400 transition-all cursor-pointer group">
+                        <div class="flex items-start justify-between mb-4">
+                            <span class="text-[10px] font-bold text-blue-600 uppercase tracking-tight flex items-center bg-blue-50 px-2 py-1 rounded">
+                                <i class="bi bi-file-earmark-pdf mr-1"></i> Unit_6_App...
+                            </span>
+                            <i class="bi bi-stars text-blue-500/30 group-hover:text-blue-500"></i>
                         </div>
-}
+                        <p class="text-[15px] font-medium text-slate-800 leading-snug">@card.Question</p>
+                        <div class="mt-6 flex justify-end text-slate-300">
+                            <i class="bi bi-three-dots"></i>
+                        </div>
+                    </div>
+                }
             </div>
         </div>
 
@@ -111,11 +111,14 @@
     </div>
 }
 
+
+
 @code {
     [Parameter]
     public string? Id { get; set; }
 
     private bool isModalOpen = false;
+
 
 
 
@@ -138,7 +141,7 @@
 
     private async Task RefreshFlashcards()
     {
-        studySetName = "Sample Study Set";
+
 
         studyset = await studysetService.GetCurrentStudysetAsync(Id);
 
@@ -153,7 +156,11 @@
         }
     }
 
-  
+    private void NavigateToLearn()
+    {
+        navigationManager.NavigateTo($"/studysets/view/learn/{Id}");
+    }
+
 
 
 }

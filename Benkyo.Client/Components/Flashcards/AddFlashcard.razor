@@ -3,15 +3,41 @@
 
 
 
-<div class="space-y-4 p-4">
-    <input @bind="flashcard.Question" placeholder="Question" class="w-full p-2 border rounded" />
-    <input @bind="flashcard.Answer" placeholder="Answer" class="w-full p-2 border rounded" />
+<div class="bg-white rounded-3xl p-8 max-w-lg mx-auto shadow-xl border border-slate-100">
+    <div class="mb-6">
+        <h2 class="text-2xl font-bold text-slate-800">Create New Flashcard</h2>
+        <p class="text-slate-500 text-sm">Add a clear question and a concise answer.</p>
+    </div>
 
-    <button @onclick="CreateFlashcard" class="bg-blue-500 text-white px-4 py-2 rounded">
-        Save Flashcard
-    </button>
+    <div class="space-y-6">
+        <div class="space-y-2">
+            <label class="text-sm font-semibold text-slate-700 ml-1">Question</label>
+            <textarea @bind="flashcard.Question"
+                      placeholder="e.g., What is the capital of France?"
+                      class="w-full p-4 border-2 border-slate-100 rounded-2xl focus:border-blue-500 focus:ring-0 transition-all outline-none resize-none"
+                      rows="2"></textarea>
+        </div>
+
+        <div class="space-y-2">
+            <label class="text-sm font-semibold text-slate-700 ml-1">Answer</label>
+            <textarea @bind="flashcard.Answer"
+                      placeholder="e.g., Paris"
+                      class="w-full p-4 border-2 border-slate-100 rounded-2xl focus:border-blue-500 focus:ring-0 transition-all outline-none resize-none"
+                      rows="2"></textarea>
+        </div>
+
+        <div class="flex items-center space-x-3 pt-2">
+            <button @onclick="CloseModal"
+                    class="flex-1 py-3 text-slate-500 font-semibold hover:bg-slate-50 rounded-2xl transition">
+                Cancel
+            </button>
+            <button @onclick="CreateFlashcard"
+                    class="flex-[2] py-3 bg-[#0f172a] text-white font-bold rounded-2xl hover:bg-black transition-all shadow-md active:scale-[0.98]">
+                Save Flashcard
+            </button>
+        </div>
+    </div>
 </div>
-
 @code {
 
     [Parameter] public string? StudysetId { get; set; }
@@ -28,11 +54,15 @@
 
         await flashcardService.CreateFlashcardAsync(flashcard);
 
-        
+
         await OnFlashcardAdded.InvokeAsync();
 
-        
+
         flashcard = new();
     }
-	
+
+    private void CloseModal()
+    {
+        // Close 
+    }
 }
