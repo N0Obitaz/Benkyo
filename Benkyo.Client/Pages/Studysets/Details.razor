@@ -1,5 +1,5 @@
 ﻿@page "/studysets/view/{id}"
-@inject NavigationManager NavigationManager
+@inject NavigationManager navigationManager
 @inject FlashcardService flashcardService
 @inject StudysetService studysetService
 @rendermode InteractiveWebAssembly
@@ -31,7 +31,7 @@
                     class="flex-1 py-4 border-2 border-dashed border-slate-200 rounded-2xl text-slate-400 font-semibold hover:bg-slate-50 transition">
                 + Add material
             </button>
-            <button class="flex-1 py-4 bg-[#0f172a] text-white font-bold rounded-2xl flex items-center justify-center space-x-2 hover:bg-black transition-shadow shadow-sm">
+            <button @onclick="NavigateToLearn" class="flex-1 py-4 bg-[#0f172a] text-white font-bold rounded-2xl flex items-center justify-center space-x-2 hover:bg-black transition-shadow shadow-sm">
                 <i class="bi bi-play-fill text-xl"></i>
                 <span>Learn @flashcards.Count flashcards</span>
             </button>
@@ -111,11 +111,14 @@
     </div>
 }
 
+
+
 @code {
     [Parameter]
     public string? Id { get; set; }
 
     private bool isModalOpen = false;
+
 
 
 
@@ -138,7 +141,7 @@
 
     private async Task RefreshFlashcards()
     {
-        
+
 
         studyset = await studysetService.GetCurrentStudysetAsync(Id);
 
@@ -153,7 +156,11 @@
         }
     }
 
-  
+    private void NavigateToLearn()
+    {
+        navigationManager.NavigateTo($"/studysets/view/learn/{Id}");
+    }
+
 
 
 }
