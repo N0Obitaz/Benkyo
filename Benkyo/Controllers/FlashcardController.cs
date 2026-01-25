@@ -76,6 +76,7 @@ namespace Benkyo.Controllers
         {
             try
             {
+                if (flashcardRequest.StudysetId == null) return;
 
                 // Doesn't need to check for existing flashcards since they can be duplicated in different lessons
 
@@ -88,6 +89,8 @@ namespace Benkyo.Controllers
                 };
                 // update 
                 await flashcardRef.SetAsync(flashCardData);
+
+                await UpdateTotalFlashcard(flashcardRequest.StudysetId, "add");
 
                // Update TotalFlashcards on based on studyset
 
