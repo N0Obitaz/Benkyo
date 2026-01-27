@@ -47,6 +47,8 @@ namespace Benkyo.Controllers
                 };
 
                 await studysetRef.SetAsync(studysetData);
+
+                _memoryCache.Remove("studysets");
                 return Ok(new { Message = "Study Set Created" });
             }
             catch (Exception ex)
@@ -123,17 +125,19 @@ namespace Benkyo.Controllers
                     var snapshot = await query.GetSnapshotAsync();
                     foreach (var document in snapshot.Documents)
                     {
+                        document.TryGetValue("total_flashcards", out int count);
                         studysets.Add(new Studyset
                         {
                             Id = document.Id,
                             StudySetColor = document.GetValue<string>("studyset_color"),
-                            StudySetName = document.GetValue<string>("studyset_name")
+                            StudySetName = document.GetValue<string>("studyset_name"),
+                            FlashcardCount = count
                         });
 
                     }
 
                     _memoryCache.Set("studysets", studysets, TimeSpan.FromMinutes(5));
-                    await Task.Delay(3000);
+                  
 
                 }
 
@@ -157,8 +161,6 @@ namespace Benkyo.Controllers
                 if (!snapshot.Exists)
                 {
                     return NotFound($"Studyset with ID :{id} not Found");
-
-
                 }
 
                 var studyset = new Studyset
