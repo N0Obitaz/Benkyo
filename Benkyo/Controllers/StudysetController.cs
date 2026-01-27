@@ -1,6 +1,7 @@
 ﻿using Benkyo.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Shared.Models;
 
 namespace Benkyo.Controllers
@@ -11,10 +12,14 @@ namespace Benkyo.Controllers
     {
         private readonly FirebaseService _firebaseService;
 
+        private readonly IMemoryCache _memoryCache;
 
-        public StudysetController(FirebaseService firebaseService)
+
+
+        public StudysetController(FirebaseService firebaseService, IMemoryCache memoryCache)
         {
             _firebaseService = firebaseService;
+            _memoryCache
         }
         
 
