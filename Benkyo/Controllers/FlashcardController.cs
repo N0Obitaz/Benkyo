@@ -24,20 +24,20 @@ namespace Benkyo.Controllers
             _memoryCache = memoryCache;
         }
 
-        [HttpGet("all")]
-        public async Task<IActionResult> FetchAllFlashcard()
+        [HttpGet("all{id}")]
+        public async Task<IActionResult> FetchAllFlashcard(string id)
         {
-            string studysetId = "kPVfwn2UxjxW5xmDqLkk";
+          
             try
             {
                 List<Flashcard> flashcards;
 
-                flashcards = _memoryCache.Get<List<Flashcard>>("flashcards");
+                flashcards = _memoryCache.Get<List<Flashcard>>(id);
                 if(flashcards is null)
                 {
                     flashcards = new List<Flashcard>();
                     var flashcardRef = _firebaseService._db.Collection("flashcards");
-                    var query = flashcardRef.WhereEqualTo("studyset_id", studysetId);
+                    var query = flashcardRef.WhereEqualTo("studyset_id", id);
                     var snapshot = await query.GetSnapshotAsync();
 
                     foreach (var document in snapshot.Documents)
@@ -51,9 +51,8 @@ namespace Benkyo.Controllers
                         });
                     }
                     Console.WriteLine("Fetched New Flashcards");
-                    _memoryCache.Set("flashcards", flashcards, TimeSpan.FromMinutes(5));
+                    _memoryCache.Set(id, flashcards, TimeSpan.FromMinutes(5));
 
-                    await Task.Delay(3000);
 
                 }
 
@@ -71,15 +70,24 @@ namespace Benkyo.Controllers
         {
             try
             {
-                    var studysetRef = _firebaseService._db.Collection("studysets").Document(studysetId);
+                var studysetRef = _firebaseService._db.Collection("studysets").Document(studysetId);
+
+                var snapshot = await studysetRef.GetSnapshotAsync();
+
+                int total = snapshot.GetValue<int>("total_flashcards");
+
+                int newTotalFlashcards = 0;
+                    
+               
+                if(operation == "add")
+                {
+                    total++;
+                    newTotalFlashcards += total;
+                }
 
 
-                    var snapshot = await studysetRef.GetSnapshotAsync();
 
-                    int total = snapshot.GetValue<int>("total_flashcards");
-
-                    int newTotalFlashcards = (operation == "add") ? total++ : total--;
-                    var flashcardData = new Dictionary<string, object>
+                var flashcardData = new Dictionary<string, object>
                 {
                     {"total_flashcards",  newTotalFlashcards}
                 };
@@ -113,6 +121,9 @@ namespace Benkyo.Controllers
                 };
                 // update 
                 await flashcardRef.SetAsync(flashCardData);
+
+                _memoryCache.Remove(flashcardRequest.StudysetId);
+                _memoryCache.Remove("studysets");
 
                 await UpdateTotalFlashcard(flashcardRequest.StudysetId, "add");
 
