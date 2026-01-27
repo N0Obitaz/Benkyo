@@ -53,6 +53,8 @@ namespace Benkyo.Controllers
                     Console.WriteLine("Fetched New Flashcards");
                     _memoryCache.Set("flashcards", flashcards, TimeSpan.FromMinutes(5));
 
+                    await Task.Delay(3000);
+
                 }
 
                 return Ok(flashcards);
