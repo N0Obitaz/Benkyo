@@ -31,6 +31,7 @@ if(FirebaseApp.DefaultInstance == null)
     // Register FirestoreDB as a singleton service
     builder.Services.AddSingleton(s => FirestoreDb.Create("benkyo-9a049"));
 builder.Services.AddSingleton<FirebaseAuthentication>();
+builder.Services.AddMemoryCache();
 
 
 
