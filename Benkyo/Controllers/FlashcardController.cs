@@ -3,6 +3,7 @@ using System.Runtime.InteropServices.ObjectiveC;
 using Benkyo.Services;
 using Google.Cloud.Firestore;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Shared.Models;
 
 namespace Benkyo.Controllers
@@ -13,11 +14,14 @@ namespace Benkyo.Controllers
     {
 
         private readonly FirebaseService _firebaseService;
+        private readonly IMemoryCache _memoryCache;
 
 
-        public FlashcardController(FirebaseService firebaseService)
+
+        public FlashcardController(FirebaseService firebaseService, IMemoryCache memoryCache)
         {
             _firebaseService = firebaseService;
+            _memoryCache = memoryCache;
         }
 
         [HttpGet("all")]
@@ -26,28 +30,38 @@ namespace Benkyo.Controllers
             string studysetId = "kPVfwn2UxjxW5xmDqLkk";
             try
             {
-                List<Flashcard> flashcards = new();
-                var flashcardRef = _firebaseService._db.Collection("flashcards");
-                var query = flashcardRef.WhereEqualTo("studyset_id", studysetId);
-                var snapshot = await query.GetSnapshotAsync();
+                List<Flashcard> flashcards;
 
-                foreach (var document in snapshot.Documents)
+                flashcards = _memoryCache.Get<List<Flashcard>>("flashcards");
+                if(flashcards is null)
                 {
-                    flashcards.Add(new Flashcard
+                    flashcards = new List<Flashcard>();
+                    var flashcardRef = _firebaseService._db.Collection("flashcards");
+                    var query = flashcardRef.WhereEqualTo("studyset_id", studysetId);
+                    var snapshot = await query.GetSnapshotAsync();
+
+                    foreach (var document in snapshot.Documents)
                     {
-                        Id = document.Id,
-                        Question = document.GetValue<string>("question"),
-                        Answer = document.GetValue<string>("answer"),
-                        Tag = document.GetValue<string>("tag")
-                    });
+                        flashcards.Add(new Flashcard
+                        {
+                            Id = document.Id,
+                            Question = document.GetValue<string>("question"),
+                            Answer = document.GetValue<string>("answer"),
+                            Tag = document.GetValue<string>("tag")
+                        });
+                    }
+                    Console.WriteLine("Fetched New Flashcards");
+                    _memoryCache.Set("flashcards", flashcards, TimeSpan.FromMinutes(5));
+
                 }
+
                 return Ok(flashcards);
 
             } catch (Exception ex)
 
             {
                 Console.WriteLine(ex.Message);
-                throw new Exception(ex.Message);
+                return BadRequest(new { error = "Error:" });
             }
         }
 
