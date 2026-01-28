@@ -114,10 +114,9 @@ namespace Benkyo.Controllers
             List<Studyset> studysets;
             try
             {
-                studysets = _memoryCache.Get<List<Studyset>>("studysets");
+                
 
-                if(studysets is null)
-                {
+                
                     studysets = new();
 
                     var studysetsRef = _firebaseService._db.Collection("studysets");
@@ -136,10 +135,7 @@ namespace Benkyo.Controllers
 
                     }
 
-                    _memoryCache.Set("studysets", studysets, TimeSpan.FromMinutes(5));
                   
-
-                }
 
                 
                 return Ok(studysets);
