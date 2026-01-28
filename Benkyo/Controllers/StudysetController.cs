@@ -109,14 +109,9 @@ namespace Benkyo.Controllers
         public async Task<IActionResult> GetAllStudysets()
         {
             string userId = "test-user-id";
-
-
             List<Studyset> studysets;
             try
             {
-                
-
-                
                     studysets = new();
 
                     var studysetsRef = _firebaseService._db.Collection("studysets");
