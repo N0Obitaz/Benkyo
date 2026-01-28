@@ -21,9 +21,7 @@ namespace Benkyo.Client.Services
             try
             {
 
-               
-
-                var response = await ht.GetStringAsync("api/flashcard/all");
+                var response = await ht.GetStringAsync($"api/flashcard/all{studysetId}");
 
                 var options = new JsonSerializerOptions
                 {

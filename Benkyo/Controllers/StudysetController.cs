@@ -1,6 +1,7 @@
 ﻿using Benkyo.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Shared.Models;
 
 namespace Benkyo.Controllers
@@ -11,10 +12,14 @@ namespace Benkyo.Controllers
     {
         private readonly FirebaseService _firebaseService;
 
+        private readonly IMemoryCache _memoryCache;
 
-        public StudysetController(FirebaseService firebaseService)
+
+
+        public StudysetController(FirebaseService firebaseService, IMemoryCache memoryCache)
         {
             _firebaseService = firebaseService;
+            _memoryCache = memoryCache;
         }
         
 
@@ -25,6 +30,7 @@ namespace Benkyo.Controllers
             
             try
             {
+
                 var existing = await _firebaseService._db.Collection("studysets")
                 .GetSnapshotAsync();
                 if (existing == null)
@@ -41,6 +47,8 @@ namespace Benkyo.Controllers
                 };
 
                 await studysetRef.SetAsync(studysetData);
+
+                _memoryCache.Remove("studysets");
                 return Ok(new { Message = "Study Set Created" });
             }
             catch (Exception ex)
@@ -101,24 +109,39 @@ namespace Benkyo.Controllers
         public async Task<IActionResult> GetAllStudysets()
         {
             string userId = "test-user-id";
-        
 
-           List<Studyset> studysets = new List<Studyset>();
+
+            List<Studyset> studysets;
             try
             {
-                var studysetsRef = _firebaseService._db.Collection("studysets");
-                var query = studysetsRef.WhereEqualTo("user_id", userId);
-                var snapshot = await query.GetSnapshotAsync();
-                foreach (var document in snapshot.Documents)
+                studysets = _memoryCache.Get<List<Studyset>>("studysets");
+
+                if(studysets is null)
                 {
-                    studysets.Add(new Studyset
+                    studysets = new();
+
+                    var studysetsRef = _firebaseService._db.Collection("studysets");
+                    var query = studysetsRef.WhereEqualTo("user_id", userId);
+                    var snapshot = await query.GetSnapshotAsync();
+                    foreach (var document in snapshot.Documents)
                     {
-                        Id = document.Id,
-                        StudySetColor = document.GetValue<string>("studyset_color"),
-                        StudySetName = document.GetValue<string>("studyset_name")
-                    });
-                   
+                        document.TryGetValue("total_flashcards", out int count);
+                        studysets.Add(new Studyset
+                        {
+                            Id = document.Id,
+                            StudySetColor = document.GetValue<string>("studyset_color"),
+                            StudySetName = document.GetValue<string>("studyset_name"),
+                            FlashcardCount = count
+                        });
+
+                    }
+
+                    _memoryCache.Set("studysets", studysets, TimeSpan.FromMinutes(5));
+                  
+
                 }
+
+                
                 return Ok(studysets);
             }
             catch (Exception ex)
@@ -138,8 +161,6 @@ namespace Benkyo.Controllers
                 if (!snapshot.Exists)
                 {
                     return NotFound($"Studyset with ID :{id} not Found");
-
-
                 }
 
                 var studyset = new Studyset

@@ -13,10 +13,12 @@ namespace Shared.Models
         public string? StudySetName { get; set; }
         
         //changed Lesson list into flashcard only
-        public List<Flashcard>? Flashcards{ get; set; }
+        public List<Flashcard>? Flashcards { get; set; }
 
         public string? UserId { get; set; }
 
         public string? StudySetColor { get; set; }
+
+        public int? FlashcardCount { get; set; }
     }
 }
