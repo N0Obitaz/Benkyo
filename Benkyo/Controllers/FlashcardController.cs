@@ -32,9 +32,9 @@ namespace Benkyo.Controllers
             {
                 List<Flashcard> flashcards;
 
-                flashcards = _memoryCache.Get<List<Flashcard>>(id);
-                if(flashcards is null)
-                {
+                //flashcards = _memoryCache.Get<List<Flashcard>>(id);
+                //if(flashcards is null)
+                //{
                     flashcards = new List<Flashcard>();
                     var flashcardRef = _firebaseService._db.Collection("flashcards");
                     var query = flashcardRef.WhereEqualTo("studyset_id", id);
@@ -50,11 +50,11 @@ namespace Benkyo.Controllers
                             Tag = document.GetValue<string>("tag")
                         });
                     }
-                    Console.WriteLine("Fetched New Flashcards");
-                    _memoryCache.Set(id, flashcards, TimeSpan.FromMinutes(5));
+                    //Console.WriteLine("Fetched New Flashcards");
+                    //_memoryCache.Set(id, flashcards, TimeSpan.FromMinutes(5));
 
 
-                }
+                //}
 
                 return Ok(flashcards);
 
