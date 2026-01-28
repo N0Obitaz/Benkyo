@@ -1,5 +1,6 @@
 ﻿using System.Net.Http.Json;
 using System.Text.Json;
+using Microsoft.Extensions.Caching.Memory;
 using Shared.Models;
 
 namespace Benkyo.Client.Services
@@ -9,10 +10,12 @@ namespace Benkyo.Client.Services
     {
 
         private readonly HttpClient _httpClient;
+        private readonly IMemoryCache _memoryCache;
 
-        public StudysetService(HttpClient httpClient)
+        public StudysetService(HttpClient httpClient, IMemoryCache memoryCache)
         {
             _httpClient = httpClient;
+            _memoryCache = memoryCache;
         }
         // Implement study set related methods here
 
