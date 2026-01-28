@@ -21,12 +21,13 @@ namespace Benkyo.Client.Services
 
         public async Task<List<Flashcard>> GetStudysetFlashcardAsync(string studysetId)
         {
+            // fetch the cached flashcards if there's any
             if(_memoryCache.TryGetValue(studysetId, out List<Flashcard>? result))
             {
-                Console.WriteLine("Fetched Cached Flashcard");
+                
                 return result;
             }
-
+            //if there's not cached, send http request to the server controller and set a new cache
             try
             {
 
