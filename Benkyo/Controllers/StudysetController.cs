@@ -43,7 +43,8 @@ namespace Benkyo.Controllers
                     { "studyset_name", request.StudySetName ?? "Untitled Study Set" },
                     { "user_id", request.UserId ?? "test-user-id" },
                     { "studyset_color", request.StudySetColor ?? "blue" },
-                    { "total_flashcards", 0 }
+                    { "total_flashcards", 0 },
+                    { "visibility", request.Visibility ?? "private" }
                 };
 
                 await studysetRef.SetAsync(studysetData);
@@ -71,7 +72,8 @@ namespace Benkyo.Controllers
                 {
                     {"studyset_name", request.StudySetName },
                     {"studyset_color", request.StudySetColor},
-                    {"user_id", "test-user-id" }
+                    {"user_id", "test-user-id" }, 
+                    {"visibility", request.Visibility ?? "private"}
                 };
                 await studysetRef.UpdateAsync(studysetData);
                 return Ok(new { Message = "Study Set Edited" });
@@ -125,7 +127,8 @@ namespace Benkyo.Controllers
                             Id = document.Id,
                             StudySetColor = document.GetValue<string>("studyset_color"),
                             StudySetName = document.GetValue<string>("studyset_name"),
-                            FlashcardCount = count
+                            FlashcardCount = count,
+                            Visibility = document.GetValue<string>("visibility")
                         });
 
                     }
@@ -159,7 +162,8 @@ namespace Benkyo.Controllers
                     Id = snapshot.Id,
                     StudySetName = snapshot.GetValue<string>("studyset_name"),
                     StudySetColor = snapshot.GetValue<string>("studyset_color"),
-                    UserId = snapshot.GetValue<string>("user_id")
+                    UserId = snapshot.GetValue<string>("user_id"),
+                    Visibility = snapshot.GetValue<string>("visibility")
                 };
 
                 return Ok(studyset);
