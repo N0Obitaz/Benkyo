@@ -10,6 +10,9 @@ namespace Benkyo.Client.Services
         private readonly HttpClient _httpClient;
         private readonly IMemoryCache _memoryCache;
 
+        //REMOVE THIS LATER: temporary userID
+        private readonly string userId = "test-user-id";
+
         private HttpClient ht = new HttpClient { BaseAddress = new Uri("https://localhost:7218") };
 
 
@@ -43,8 +46,6 @@ namespace Benkyo.Client.Services
                     var flashcards = JsonSerializer.Deserialize<List<Flashcard>>(response, options);
 
                     _memoryCache.Set(studysetId, flashcards, TimeSpan.FromMinutes(5));
-                    Console.WriteLine("Fetched New set of Flashcards");
-
                     return flashcards ?? new List<Flashcard>();
                 }
             } catch(Exception ex)
@@ -56,7 +57,13 @@ namespace Benkyo.Client.Services
         public async Task<bool> CreateFlashcardAsync(Flashcard flashcard)
         {
             var response = await _httpClient.PostAsJsonAsync("api/flashcard/create", flashcard);
+            
+            if(response.IsSuccessStatusCode)
+            {
+                _memoryCache.Remove(flashcard.StudysetId);
+                _memoryCache.Remove(userId);
 
+            }
             return response.IsSuccessStatusCode;
         }
 
@@ -91,8 +98,6 @@ namespace Benkyo.Client.Services
             {
                 Console.WriteLine(ex.Message);
             }
-            
-
             return 0;
         }
     }

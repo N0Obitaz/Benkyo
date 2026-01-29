@@ -20,5 +20,7 @@ namespace Shared.Models
         public string? StudySetColor { get; set; }
 
         public int? FlashcardCount { get; set; }
+
+        public string? Visibility { get; set; }
     }
 }
