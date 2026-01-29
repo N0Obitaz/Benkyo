@@ -21,21 +21,32 @@ namespace Benkyo.Client.Services
 
         public async Task<List<Flashcard>> GetStudysetFlashcardAsync(string studysetId)
         {
+            // fetch the cached flashcards if there's any
+            if(_memoryCache.TryGetValue(studysetId, out List<Flashcard>? result))
+            {
+                
+                return result;
+            }
+            //if there's not cached, send http request to the server controller and set a new cache
             try
             {
 
                 var response = await ht.GetStringAsync($"api/flashcard/all{studysetId}");
 
-                var options = new JsonSerializerOptions
+                if(response != null)
                 {
-                    PropertyNameCaseInsensitive = true
-                };
+                    var options = new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    };
 
-                var flashcards = JsonSerializer.Deserialize<List<Flashcard>>(response, options);
+                    var flashcards = JsonSerializer.Deserialize<List<Flashcard>>(response, options);
 
-                if (flashcards != null) return flashcards;
+                    _memoryCache.Set(studysetId, flashcards, TimeSpan.FromMinutes(5));
+                    Console.WriteLine("Fetched New set of Flashcards");
 
-               
+                    return flashcards ?? new List<Flashcard>();
+                }
             } catch(Exception ex)
             {
                 Console.WriteLine(ex.Message);

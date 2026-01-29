@@ -1,5 +1,6 @@
 ﻿using System.Net.Http.Json;
 using System.Text.Json;
+using Microsoft.Extensions.Caching.Memory;
 using Shared.Models;
 
 namespace Benkyo.Client.Services
@@ -9,16 +10,24 @@ namespace Benkyo.Client.Services
     {
 
         private readonly HttpClient _httpClient;
+        private readonly IMemoryCache _memoryCache;
 
-        public StudysetService(HttpClient httpClient)
+        public StudysetService(HttpClient httpClient, IMemoryCache memoryCache)
         {
             _httpClient = httpClient;
+            _memoryCache = memoryCache;
         }
         // Implement study set related methods here
 
         //will need userId to get studysets for specific user I'll change it later
         public async Task<List<Studyset>> GetUserStudySetAsync()
         {
+            //REMOVE THIS LATER: temporary userID
+            string userId = "test-user-id";
+            if(_memoryCache.TryGetValue(userId, out List<Studyset>? result)) {
+                return result;
+            }
+
             try
             {
                 using var ht = new HttpClient { BaseAddress = new Uri("https://localhost:7218") };
@@ -26,14 +35,18 @@ namespace Benkyo.Client.Services
 
                 var response = await ht.GetStringAsync("api/studyset/all");
 
-                var options = new JsonSerializerOptions
+                if(response != null)
                 {
-                    PropertyNameCaseInsensitive = true
-                };
+                    var options = new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    };
 
-                var studysets = JsonSerializer.Deserialize<List<Studyset>>(response, options);
-             
-                if (studysets is not null) return studysets;
+                    var studysets = JsonSerializer.Deserialize<List<Studyset>>(response, options);
+
+                    _memoryCache.Set(userId, studysets, TimeSpan.FromMinutes(5));
+                    return studysets ?? new List<Studyset>();
+                }
             }catch(Exception ex)
             {
                 Console.WriteLine(ex.Message);
