@@ -30,13 +30,31 @@
                 <!-- Study Set Name -->
                 <div class="mb-7">
                     <label class="block text-sm font-semibold text-gray-900 mb-3 tracking-tight">
-                        Study set name
+                        Studyset name
                     </label>
                     <input type="text"
                            @bind="selectedStudyset.StudySetName"
                            placeholder="E.g. Enzymes"
                            class="w-full px-5 py-4 border-2 border-gray-200 rounded-2xl text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 focus:outline-none transition-all duration-200" />
                     
+                </div>
+                <div class="mb-7">
+                    <label class="block text-sm font-semibold text-gray-900 mb-3">Visibility</label>
+
+                    <div class="flex items-center gap-4">
+                        <button type="button" @onclick="ToggleVisibility"
+                                class="@(selectedStudyset.Visibility == "Public" ? "bg-indigo-600" : "bg-gray-400")
+                           relative inline-flex h-8 w-14 items-center rounded-full transition-colors focus:ring-4 focus:ring-indigo-100">
+
+                            <span class="@(selectedStudyset.Visibility == "Public" ? "translate-x-7" : "translate-x-1")
+                             inline-block h-6 w-6 transform rounded-full bg-white shadow-md transition-transform">
+                            </span>
+                        </button>
+
+                        <span class="text-base font-bold @(selectedStudyset.Visibility == "Public" ? "text-indigo-600" : "text-gray-600")">
+                            @selectedStudyset.Visibility
+                        </span>
+                    </div>
                 </div>
 
                 <!-- Color Picker -->
@@ -116,4 +134,12 @@
         await studysetService.EditStudySetAsync(selectedStudyset);
         await CloseModal();
     }
+
+    private void ToggleVisibility()
+    {
+        selectedStudyset.Visibility = (selectedStudyset.Visibility == "Public")
+                                      ? "Private"
+                                      : "Public";
+    }
+}
 }
