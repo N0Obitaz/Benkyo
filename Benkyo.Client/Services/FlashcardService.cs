@@ -1,5 +1,6 @@
 ﻿using System.Net.Http.Json;
 using System.Text.Json;
+using Microsoft.Extensions.Caching.Memory;
 using Shared.Models;
 
 namespace Benkyo.Client.Services
@@ -7,13 +8,15 @@ namespace Benkyo.Client.Services
     public class FlashcardService
     {
         private readonly HttpClient _httpClient;
+        private readonly IMemoryCache _memoryCache;
 
         private HttpClient ht = new HttpClient { BaseAddress = new Uri("https://localhost:7218") };
 
 
-        public FlashcardService(HttpClient httpClient)
+        public FlashcardService(HttpClient httpClient, IMemoryCache memoryCache)
         {
             _httpClient = httpClient;
+            _memoryCache = memoryCache;
         }
 
         public async Task<List<Flashcard>> GetStudysetFlashcardAsync(string studysetId)
