@@ -12,6 +12,9 @@ namespace Benkyo.Client.Services
         private readonly HttpClient _httpClient;
         private readonly IMemoryCache _memoryCache;
 
+        //REMOVE THIS LATER: temporary userID
+        private readonly string userId = "test-user-id";
+
         public StudysetService(HttpClient httpClient, IMemoryCache memoryCache)
         {
             _httpClient = httpClient;
@@ -22,8 +25,8 @@ namespace Benkyo.Client.Services
         //will need userId to get studysets for specific user I'll change it later
         public async Task<List<Studyset>> GetUserStudySetAsync()
         {
-            //REMOVE THIS LATER: temporary userID
-            string userId = "test-user-id";
+            
+            
             if(_memoryCache.TryGetValue(userId, out List<Studyset>? result)) {
                 return result;
             }
