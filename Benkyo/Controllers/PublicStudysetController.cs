@@ -43,7 +43,7 @@ namespace Benkyo.Controllers
 
                 });
             }
-            return Ok(studysetsPer10s);
+            return Ok(studysetsPer10);
         }
 
     }
