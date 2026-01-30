@@ -25,7 +25,7 @@ namespace Benkyo.Controllers
     
             var studysetRef = _firebaseService._db.Collection("studysets");
 
-            var query = studysetRef.WhereEqualTo("visibility", "public");
+            var query = studysetRef.WhereEqualTo("visibility", "Private");
 
             var snapshot = await studysetRef.GetSnapshotAsync();
             return Ok();
