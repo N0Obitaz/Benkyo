@@ -41,11 +41,9 @@ namespace Benkyo.Controllers
                     UserId = s.GetValue<string>("user_id"),
                     FlashcardCount = s.GetValue<int>("total_flashcards"),
 
-
-
                 });
             }
-            return Ok();
+            return Ok(studysetsPer10s);
         }
 
     }
