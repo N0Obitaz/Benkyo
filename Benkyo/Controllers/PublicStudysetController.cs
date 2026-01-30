@@ -37,6 +37,11 @@ namespace Benkyo.Controllers
                 {
                     Id = s.Id,
                     StudySetName = s.GetValue<string>("studyset_name"),
+                    StudySetColor = s.GetValue<string>("studyset_color"),
+                    UserId = s.GetValue<string>("user_id"),
+                    FlashcardCount = s.GetValue<int>("total_flashcards"),
+
+
 
                 });
             }
