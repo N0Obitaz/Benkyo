@@ -15,21 +15,29 @@ namespace Benkyo.Client.Services
         }
         public async Task<Studyset> GetAllStudysetsPerVisibility ()
         {
-            var response = await _ht.GetStringAsync($"api/publicstudyset/all");
-
-
-            if (response != null)
+        
+            try
             {
-                var options = new JsonSerializerOptions
+                var response = await _ht.GetStringAsync($"api/publicstudyset/all");
+
+
+                if (response != null)
                 {
-                    PropertyNameCaseInsensitive = true
-                };
+                    var options = new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    };
 
-                var studysets = JsonSerializer.Deserialize<List<Studyset>>(response, options);
+                    var studysets = JsonSerializer.Deserialize<List<Studyset>>(response, options);
 
-         
-                return studysets ?? new List<Studyset>();
+
+                    return studysets ?? new List<Studyset>();
+                }
+            }catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
             }
+           
         }
     }
 }
