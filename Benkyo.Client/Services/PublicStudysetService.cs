@@ -18,14 +18,18 @@ namespace Benkyo.Client.Services
             var response = await _ht.GetStringAsync($"api/publicstudyset/all");
 
 
-            var options = new JsonSerializerOptions
+            if (response != null)
             {
-                PropertyNameCaseInsensitive = true
-            };
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
 
-            var studyset = JsonSerializer.Deserialize<Studyset>(response, options);
+                var studysets = JsonSerializer.Deserialize<List<Studyset>>(response, options);
 
-            return studyset; ;
+         
+                return studysets ?? new List<Studyset>();
+            }
         }
     }
 }
