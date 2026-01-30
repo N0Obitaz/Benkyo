@@ -21,7 +21,11 @@ namespace Benkyo.Controllers
         [HttpGet]
         public async Task<IActionResult> FetchPublicStudysets()
         {
+
+    
             var studysetRef = _firebaseService._db.Collection("studysets");
+
+            var query = studysetRef.WhereEqualTo("visibility", "public");
 
             var snapshot = await studysetRef.GetSnapshotAsync();
             return Ok();
