@@ -1,6 +1,7 @@
 ﻿using Benkyo.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using Shared.Models;
 
 namespace Benkyo.Controllers
 {
@@ -22,12 +23,23 @@ namespace Benkyo.Controllers
         public async Task<IActionResult> FetchPublicStudysets()
         {
 
-    
+
+            List<Studyset> studysetsPer10 = new();
             var studysetRef = _firebaseService._db.Collection("studysets");
 
             var query = studysetRef.WhereEqualTo("visibility", "Private");
 
             var snapshot = await studysetRef.GetSnapshotAsync();
+
+            foreach(var s in snapshot)
+            {
+                studysetsPer10.Add(new Studyset
+                {
+                    Id = s.Id,
+                    StudySetName = s.GetValue<string>("studyset_name"),
+
+                });
+            }
             return Ok();
         }
 
