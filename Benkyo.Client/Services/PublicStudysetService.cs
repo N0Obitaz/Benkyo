@@ -1,15 +1,31 @@
-﻿using Microsoft.Extensions.Caching.Memory;
+﻿using System.Text.Json;
+using Microsoft.Extensions.Caching.Memory;
+using Shared.Models;
 
 namespace Benkyo.Client.Services
 {
     public class PublicStudysetService
     {
-        private readonly HttpClient ht = new HttpClient { BaseAddress = new Uri("localhost://7218") };
+        private readonly HttpClient _ht = new HttpClient { BaseAddress = new Uri("localhost://7218") };
 
         private readonly IMemoryCache _memoryCache;
-        public StudysetService(IMemoryCache memoryCache)
+        public PublicStudysetService(IMemoryCache memoryCache)
         {
             _memoryCache = memoryCache;
+        }
+        public async Task<Studyset> GetAllStudysetsPerVisibility ()
+        {
+            var response = await _ht.GetStringAsync($"api/publicstudyset/all");
+
+
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+
+            var studyset = JsonSerializer.Deserialize<Studyset>(response, options);
+
+            return studyset; ;
         }
     }
 }
