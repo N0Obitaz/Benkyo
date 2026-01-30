@@ -1,0 +1,61 @@
+﻿@rendermode InteractiveWebAssembly
+@page "/public-decks"
+
+<h3>PublicDecks</h3>
+
+<div class="max-w-6xl mx-auto px-4 py-8 font-sans">
+    <h2 class="text-2xl font-bold text-slate-900 mb-6">Public decks</h2>
+
+    <div class="relative mb-6">
+        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+            <svg class="h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+        </div>
+        <input type="text"
+               class="block w-full pl-11 pr-4 py-4 border border-slate-200 rounded-full text-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all placeholder-slate-400 bg-white shadow-sm"
+               placeholder="Search 100 million Benkyo flashcards" />
+    </div>
+    <div class="flex gap-3 mb-10">
+        <button class="px-4 py-1.5 border border-slate-200 rounded-full text-sm font-medium flex items-center gap-2 hover:bg-slate-50">
+            Level <i class="fas fa-chevron-down text-[10px]"></i>
+        </button>
+        <button class="px-4 py-1.5 border border-slate-200 rounded-full text-sm font-medium flex items-center gap-2 hover:bg-slate-50">
+            Subject <i class="fas fa-chevron-down text-[10px]"></i>
+        </button>
+        <button class="px-4 py-1.5 border border-slate-200 rounded-full text-sm font-medium flex items-center gap-2 hover:bg-slate-50">
+            School <i class="fas fa-chevron-down text-[10px]"></i>
+        </button>
+    </div>
+
+    <div class="relative flex py-5 items-center justify-center mb-6">
+        <div class="absolute inset-0 flex items-center">
+            <div class="w-full border-t border-slate-100"></div>
+        </div>
+        <div class="relative px-4 py-1.5 bg-slate-50 border border-slate-200 rounded-full flex items-center gap-2 text-sm text-slate-700">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
+            </svg>
+            Popular at "Colegio de Montalban"
+        </div>
+    </div>
+
+    <div class="space-y-4">
+        <div class="group relative flex flex-col p-6 bg-white border border-slate-200 rounded-2xl shadow-sm hover:shadow-md transition-shadow cursor-pointer overflow-hidden">
+            <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-pink-400"></div>
+
+            <h3 class="text-lg font-bold text-slate-800">Import</h3>
+            <p class="text-sm text-slate-500 mb-4">63 cards</p>
+
+            <div class="flex gap-2">
+                <span class="px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-xs font-semibold">First year</span>
+                <span class="px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-xs font-semibold">Science Teacher Education</span>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+@code {
+
+}
