@@ -48,7 +48,7 @@ namespace Benkyo.Controllers
                 return Ok(studysetsPer10);
             }catch(Exception ex)
             {
-                Console.WriteLine(ex.Message);
+            
                 return BadRequest(ex.Message);
             }
 
