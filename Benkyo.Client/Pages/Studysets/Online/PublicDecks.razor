@@ -1,6 +1,7 @@
-﻿@rendermode InteractiveWebAssembly
+﻿@page "/public-decks"
+@rendermode InteractiveWebAssembly
+@inject PublicStudysetService service
 
-@page "/public-decks"
 
 <h3>PublicDecks</h3>
 
@@ -59,4 +60,9 @@
 
 @code {
 
+    List<Studyset> PublicStudysets = new();
+    protected override async Task OnInitializedAsync()
+    {
+        PublicStudysets = await service.GetAllStudysetsPerVisibility();   
+    }
 }
