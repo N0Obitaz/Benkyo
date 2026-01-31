@@ -13,6 +13,7 @@ builder.Services.AddMemoryCache();
 
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<StudysetService>();
+builder.Services.AddScoped<PublicStudysetService>();
 builder.Services.AddScoped<Studyset>();
 builder.Services.AddScoped<FlashcardService>();
 builder.Services.AddScoped<ColorOption>();
