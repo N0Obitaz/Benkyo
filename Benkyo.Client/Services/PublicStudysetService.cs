@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using Benkyo.Client.Pages.Studysets;
 using Microsoft.Extensions.Caching.Memory;
 using Shared.Models;
 
@@ -13,7 +14,7 @@ namespace Benkyo.Client.Services
         {
             _memoryCache = memoryCache;
         }
-        public async Task<Studyset> GetAllStudysetsPerVisibility ()
+        public async Task<List<Studyset>> GetAllStudysetsPerVisibility ()
         {
         
             try
@@ -30,14 +31,16 @@ namespace Benkyo.Client.Services
 
                     var studysets = JsonSerializer.Deserialize<List<Studyset>>(response, options);
 
-
+                   
                     return studysets ?? new List<Studyset>();
                 }
-            }catch (Exception ex)
+                
+            }
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
-           
+            return new List<Studyset>();
         }
     }
 }
