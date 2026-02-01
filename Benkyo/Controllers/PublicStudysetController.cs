@@ -6,7 +6,7 @@ using Shared.Models;
 namespace Benkyo.Controllers
 {
     [ApiController]
-    [Route("api[controller]")]
+    [Route("api/[controller]")]
     public class PublicStudysetController : ControllerBase
     {
         private readonly FirebaseService _firebaseService;
@@ -19,31 +19,40 @@ namespace Benkyo.Controllers
         }
 
         //Fetch 10 rows of studysets only
-        [HttpGet]
+        [HttpGet("all")]
         public async Task<IActionResult> FetchPublicStudysets()
         {
-
-
-            List<Studyset> studysetsPer10 = new();
-            var studysetRef = _firebaseService._db.Collection("studysets");
-
-            var query = studysetRef.WhereEqualTo("visibility", "Private");
-
-            var snapshot = await studysetRef.GetSnapshotAsync();
-
-            foreach(var s in snapshot)
+            
+            try
             {
-                studysetsPer10.Add(new Studyset
-                {
-                    Id = s.Id,
-                    StudySetName = s.GetValue<string>("studyset_name"),
-                    StudySetColor = s.GetValue<string>("studyset_color"),
-                    UserId = s.GetValue<string>("user_id"),
-                    FlashcardCount = s.GetValue<int>("total_flashcards"),
+        
+                List<Studyset> studysetsPer10 = new();
+                var studysetRef = _firebaseService._db.Collection("studysets");
 
-                });
+                var query = studysetRef.WhereEqualTo("visibility", "Public");
+
+                var snapshot = await query.GetSnapshotAsync();
+
+                foreach (var s in snapshot)
+                {
+                    studysetsPer10.Add(new Studyset
+                    {
+                        Id = s.Id,
+                        StudySetName = s.GetValue<string>("studyset_name"),
+                        StudySetColor = s.GetValue<string>("studyset_color"),
+                        UserId = s.GetValue<string>("user_id"),
+                        FlashcardCount = s.GetValue<int>("total_flashcards"),
+
+                    });
+                }
+                return Ok(studysetsPer10);
+            }catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest(ex.Message);
             }
-            return Ok(studysetsPer10);
+
+           
         }
 
     }
