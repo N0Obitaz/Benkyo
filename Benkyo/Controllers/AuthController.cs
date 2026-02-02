@@ -79,7 +79,11 @@ namespace Benkyo.Controllers
                 {
                     {"email", request.Email! },
                     { "createdAt", Timestamp.GetCurrentTimestamp() },
-                    {"uid", userRecord.Uid! }
+                    {"uid", userRecord.Uid! },
+                    {"experience", 0! },
+                    {"level", 1! },
+                    {"profile_image", ""! },
+
                 };
 
                 await userRef.SetAsync(userData);

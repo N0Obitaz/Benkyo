@@ -42,13 +42,14 @@ namespace Benkyo.Controllers
                         StudySetColor = s.GetValue<string>("studyset_color"),
                         UserId = s.GetValue<string>("user_id"),
                         FlashcardCount = s.GetValue<int>("total_flashcards"),
+                        OtherDetails = s.GetValue<List<string>>("other_details")
 
                     });
                 }
                 return Ok(studysetsPer10);
             }catch(Exception ex)
             {
-                Console.WriteLine(ex.Message);
+            
                 return BadRequest(ex.Message);
             }
 
