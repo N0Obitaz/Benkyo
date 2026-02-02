@@ -30,14 +30,20 @@ if(FirebaseApp.DefaultInstance == null)
 
     // Register FirestoreDB as a singleton service
     builder.Services.AddSingleton(s => FirestoreDb.Create("benkyo-9a049"));
-builder.Services.AddSingleton<FirebaseAuthentication>();
+
 builder.Services.AddMemoryCache();
 
+builder.Services.AddSingleton<FirebaseAuthentication>();
+// Register server services not included the FirebaseAuthentication for the scoped lifetime
+builder.Services.Scan(scan => scan
+    .FromAssemblyOf<FirebaseService>()
+    .AddClasses(classes => classes.InNamespaces("Benkyo.Services")
+    .Where(c => c.Name != "FirebaseAuthentication"))
+    .AsSelf()
+    .WithScopedLifetime());
 
 
-builder.Services.AddScoped<FirebaseService>();
-
-
+// Register Client services for the scoped lifetime to avoid server exceptions
 builder.Services.Scan(scan => scan
     .FromAssemblyOf<AuthService>()
     .AddClasses(classes => classes.InNamespaces("Benkyo.Client.Services"))
