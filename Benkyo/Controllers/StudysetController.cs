@@ -44,7 +44,8 @@ namespace Benkyo.Controllers
                     { "user_id", request.UserId ?? "test-user-id" },
                     { "studyset_color", request.StudySetColor ?? "blue" },
                     { "total_flashcards", 0 },
-                    { "visibility", request.Visibility ?? "private" }
+                    { "visibility", request.Visibility ?? "private" },
+                    { "other_details", request.OtherDetails ?? new() }
                 };
 
                 await studysetRef.SetAsync(studysetData);
