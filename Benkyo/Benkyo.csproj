@@ -17,6 +17,7 @@
 	  <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="10.0.2" />
 	  <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="10.0.0" />
 	  <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
+	  <PackageReference Include="Scrutor" Version="7.0.0" />
 	  <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.14.0" />
 	  <ProjectReference Include="..\Benkyo.Client\Benkyo.Client.csproj" />
 	  <ProjectReference Include="..\Shared\Shared.csproj" />

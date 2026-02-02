@@ -37,13 +37,17 @@ builder.Services.AddMemoryCache();
 
 builder.Services.AddScoped<FirebaseService>();
 
-builder.Services.AddTransient<User>();
-builder.Services.AddScoped<AuthService>();
-builder.Services.AddScoped<StudysetService>();
-builder.Services.AddScoped<PublicStudysetService>();
+
+builder.Services.Scan(scan => scan
+    .FromAssemblyOf<AuthService>()
+    .AddClasses(classes => classes.InNamespaces("Benkyo.Client.Services"))
+    .AsSelf()
+    .WithScopedLifetime());
+    
+
 builder.Services.AddScoped<Studyset>();
 builder.Services.AddScoped<Flashcard>();
-builder.Services.AddScoped<FlashcardService>();
+builder.Services.AddTransient<User>();
 builder.Services.AddScoped<ColorOption>();
 builder.Services.AddScoped<ColorOptions>();
 
