@@ -3,8 +3,6 @@
 @inject PublicStudysetService service
 
 
-<h3>PublicDecks</h3>
-
 <div class="max-w-6xl mx-auto px-4 py-8 font-sans">
     <h2 class="text-2xl font-bold text-slate-900 mb-6">Public decks</h2>
 
@@ -44,29 +42,33 @@
 
     @if(PublicStudysets is not null)
     {
-        foreach(var studyset in PublicStudysets)
+        <div class="flex flex-col gap-4">
+        @foreach(var studyset in PublicStudysets)
         {
-            <div class="space-y-4">
+           
                 <div class="group relative flex flex-col p-6 bg-white border border-slate-200 rounded-2xl shadow-sm hover:shadow-md transition-shadow cursor-pointer overflow-hidden">
                     <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-pink-400"></div>
 
-                    <h3 class="text-lg font-bold text-slate-800">@studyset.StudySetName</h3>
-                    <p class="text-sm text-slate-500 mb-4">Number of cards</p>
+                 
+                    <div class="flex flex-col gap-1">
+                        <h3 class="text-lg font-bold text-slate-800">@studyset.StudySetName</h3>
+                        <p class="text-sm text-slate-500">Number of cards</p>
+                    </div>
 
-                    <div class="flex gap-2">
-                        @if(studyset.OtherDetails is not null)
+                   
+                    <div class="flex flex-wrap gap-2 mt-4">
+                        @if (studyset.OtherDetails is not null)
                         {
-                            foreach(var detail in studyset.OtherDetails)
+                            foreach (var detail in studyset.OtherDetails)
                             {
                                 <span class="px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-xs font-semibold">@detail</span>
-
                             }
-                            
                         }
-                        </div>
+                    </div>
                 </div>
-            </div>
+          
         }
+        </div>
         
     } else
     {
