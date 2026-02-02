@@ -54,9 +54,16 @@
                     <p class="text-sm text-slate-500 mb-4">Number of cards</p>
 
                     <div class="flex gap-2">
-                        <span class="px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-xs font-semibold">First year</span>
-                        <span class="px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-xs font-semibold">Science Teacher Education</span>
-                    </div>
+                        @if(studyset.OtherDetails is not null)
+                        {
+                            foreach(var detail in studyset.OtherDetails)
+                            {
+                                <span class="px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-xs font-semibold">@detail</span>
+
+                            }
+                            
+                        }
+                        </div>
                 </div>
             </div>
         }
