@@ -1,0 +1,105 @@
+﻿@page "/progress"
+
+<div class="min-h-screen bg-gray-50 p-6 flex flex-col items-center font-sans text-slate-800">
+
+    <div class="w-full max-w-4xl flex justify-end items-center gap-6 mb-8">
+        <div class="flex items-center gap-2">
+            <button class="bg-indigo-100 text-indigo-700 px-4 py-1.5 rounded-full font-bold flex items-center gap-2">
+                <span class="w-2 h-2 bg-indigo-600 rounded-full animate-pulse"></span>
+                Benkyo Live
+            </button>
+        </div>
+        <div class="flex items-center gap-2 font-bold text-gray-500">
+            <img src="path-to-your-coin-icon.png" class="w-5 h-5" alt="coins" />
+            284
+        </div>
+        <div class="text-gray-400">
+            <i class="bi bi-bell-fill text-xl"></i>
+        </div>
+        <div class="w-10 h-10 rounded-full bg-orange-200 overflow-hidden border-2 border-white shadow-sm">
+            <img src="path-to-profile.jpg" alt="profile" />
+        </div>
+    </div>
+
+    <div class="w-full max-w-3xl bg-white rounded-3xl shadow-sm border border-gray-100 p-6 mb-6 flex items-center gap-4">
+        <div class="relative">
+            <div class="w-16 h-16 rounded-2xl bg-orange-200 overflow-hidden">
+                <img src="path-to-profile.jpg" alt="profile" />
+            </div>
+            <span class="absolute -bottom-2 -right-2 bg-blue-600 text-white text-[10px] font-bold px-2 py-1 rounded-lg border-2 border-white">
+                5
+            </span>
+        </div>
+        <div class="flex-1">
+            <div class="flex justify-between items-end mb-2">
+                <h2 class="text-xl font-black">Skilled</h2>
+                <span class="text-gray-400 font-bold text-sm">Level 6: 500 XP</span>
+            </div>
+            <div class="w-full bg-gray-100 h-6 rounded-full overflow-hidden relative">
+                <div class="bg-emerald-400 h-full rounded-full transition-all duration-500" style="width: 72%;"></div>
+                <span class="absolute inset-0 flex items-center px-4 text-xs font-bold text-emerald-900">360 XP</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="w-full max-w-3xl bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="grid grid-cols-1 md:grid-cols-2">
+
+            <div class="p-8 border-r border-gray-50">
+                <h3 class="text-2xl font-black mb-6">Start your streak!</h3>
+
+                <div class="grid grid-cols-7 gap-y-4 text-center">
+                    @foreach (var day in DaysOfWeek)
+                    {
+                        <span class="text-gray-400 font-bold text-sm">@day</span>
+                    }
+
+                    @for (int i = 11; i <= 31; i++)
+                    {
+                        <div class="relative py-2">
+                            <span class="text-slate-400 font-bold">@i</span>
+                        </div>
+                    }
+                    @for (int i = 1; i <= 7; i++)
+                    {
+                        <div class="relative py-2">
+                            <span class="text-slate-500 font-bold @(i == 2 ? "text-slate-900" : "")">@i</span>
+                            @if (i == 2)
+                            {
+                                <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-red-500 rounded-full"></div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="p-8 flex flex-col items-center justify-center text-center">
+                <div class="mb-2">
+                    <span class="text-4xl font-black">2</span>
+                    <p class="text-gray-500 font-bold text-sm">Questions to start your streak</p>
+                </div>
+
+                <div class="relative w-48 h-48 flex items-center justify-center">
+                    <svg class="w-full h-full -rotate-90">
+                        <circle cx="96" cy="96" r="80" stroke="currentColor" stroke-width="16" fill="transparent" class="text-gray-100" />
+                        <circle cx="96" cy="96" r="80" stroke="currentColor" stroke-width="16" fill="transparent"
+                                stroke-dasharray="502" stroke-dashoffset="400" stroke-linecap="round" class="text-red-500" />
+                    </svg>
+                    <div class="absolute flex flex-col items-center">
+                        <div class="text-5xl animate-bounce">🔥</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-6 pt-0">
+            <button class="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-4 rounded-2xl transition-all active:scale-[0.98]">
+                Start streak
+            </button>
+        </div>
+    </div>
+</div>
+
+@code {
+    private string[] DaysOfWeek = { "Su", "Mo", "Tu", "We", "Th", "Fr", "Sa" };
+}
