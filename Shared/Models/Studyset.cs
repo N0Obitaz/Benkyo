@@ -22,5 +22,6 @@ namespace Shared.Models
         public int? FlashcardCount { get; set; }
 
         public string? Visibility { get; set; }
+        public List<string>? OtherDetails { get; set; }
     }
 }
