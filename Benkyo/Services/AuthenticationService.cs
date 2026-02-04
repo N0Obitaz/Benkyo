@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using FirebaseAdmin.Auth;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Shared.Models;
 
@@ -27,6 +28,12 @@ namespace Benkyo.Services
                 // create new claims identity
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
+                var authProperties = new AuthenticationProperties
+                {
+                    IsPersistent = true,
+                };
+
+                var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
             }
             catch (Exception ex)
             {
