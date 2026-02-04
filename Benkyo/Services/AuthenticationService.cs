@@ -15,7 +15,13 @@ namespace Benkyo.Services
                 if (user is null) return;
                 FirebaseToken decodedToken = await FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(user.Token);
 
-               
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, user.Uid!),
+                    new Claim(ClaimTypes.Email, user.Email!),
+                    new Claim(ClaimTypes.Role, user.Role!),
+                    new Claim(ClaimTypes.GivenName, user.Name!)
+                };
 
             }
             catch (Exception ex)
