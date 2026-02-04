@@ -46,7 +46,7 @@ namespace Benkyo.Controllers
                 var userToBePassed = new Shared.Models.User
                 {
                     Token = user.User.Credential.IdToken,
-                    Expiration = DateTime.UtcNow.AddHours(1),
+                    
                     Email = request.Email,
                     Name = request.Name ?? "",
                     Role = request.Role ?? "user",
