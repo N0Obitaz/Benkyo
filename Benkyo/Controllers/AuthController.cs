@@ -48,7 +48,7 @@ namespace Benkyo.Controllers
                     Token = user.User.Credential.IdToken,
                     Expiration = DateTime.UtcNow.AddHours(1),
                     Email = request.Email,
-                    Name = request.Name,
+                    Name = request.Name ?? "",
                     Role = request.Role ?? "user",
                 };
 
