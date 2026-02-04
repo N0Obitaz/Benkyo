@@ -43,6 +43,11 @@ namespace Benkyo.Services
 
                 await _http.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal, authProperties);
             }
+
+            catch (FirebaseAuthException faex)
+            {
+                Console.WriteLine($"Firebase authentication error: {faex.Message}");
+            }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error authenticating user: {ex.Message}");
