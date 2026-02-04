@@ -13,10 +13,14 @@ namespace Shared.Models
         public DateTime? Expiration { get; set; }
         public string? Email { get; set; }
 
+        public string? Name { get; set; }
+
         public string? Password { get; set; }
 
         public int Experience { get; set; }
 
         public int Level { get; set; }
+
+        public string? Role { get; set; }
     }
 }
