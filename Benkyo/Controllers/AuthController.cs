@@ -16,12 +16,14 @@ namespace Benkyo.Controllers
         private readonly FirebaseService _firebaseService;
         private readonly FirebaseAuthentication _firebaseAuth;
         private readonly FirebaseAuthClient client;
+        private readonly AuthenticationService _authService;
 
-        public AuthController(FirebaseService firebaseService,FirebaseAuthentication firebaseAuth)
+        public AuthController(FirebaseService firebaseService,FirebaseAuthentication firebaseAuth, AuthenticationService authService)
         {
             _firebaseAuth = firebaseAuth;
             _firebaseService = firebaseService;
             client = new FirebaseAuthClient(_firebaseAuth.Config);
+            _authService = authService;
         }
 
         [HttpPost("login")] 
@@ -41,13 +43,18 @@ namespace Benkyo.Controllers
                 // Implement login logic using _firebaseService
                 // For example, verify user credentials and generate a token
                 // Placeholder response
-                var response = new Shared.Models.User
+                var userToBePassed = new Shared.Models.User
                 {
-                    Token = "sample_token",
-                    Expiration = DateTime.UtcNow.AddHours(1),
-                    Email = request.Email
+                    Token = user.User.Credential.IdToken,
+                    
+                    Email = request.Email,
+                    Name = request.Name ?? "",
+                    Role = request.Role ?? "user",
                 };
-                return Ok(new {Message = "You're Here"});
+
+                await _authService.AuthenticateUser(userToBePassed);
+
+                return Ok(new {Message = "You have Successfully Logged on"});
 
             } catch( Exception ex)
             {
