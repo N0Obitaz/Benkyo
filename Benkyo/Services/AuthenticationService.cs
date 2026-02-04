@@ -8,7 +8,12 @@ namespace Benkyo.Services
 {
     public class AuthenticationService
     {
+        private readonly HttpContext _http;
 
+        public AuthenticationService(IHttpContextAccessor httpContextAccessor)
+        {
+            _http = httpContextAccessor.HttpContext!;
+        }
         public async Task AuthenticateUser(User user)
         {
 
@@ -34,6 +39,9 @@ namespace Benkyo.Services
                 };
 
                 var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+
+
+                
             }
             catch (Exception ex)
             {
