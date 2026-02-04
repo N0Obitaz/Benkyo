@@ -1,4 +1,5 @@
-﻿using Shared.Models;
+﻿using FirebaseAdmin.Auth;
+using Shared.Models;
 
 namespace Benkyo.Services
 {
@@ -10,11 +11,12 @@ namespace Benkyo.Services
 
             try
             {
+                FirebaseToken decodedToken = await FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(user.Token);
 
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error authenticating user: {ex.Message}");)
+                Console.WriteLine($"Error authenticating user: {ex.Message}");
             }
         }
 
