@@ -43,12 +43,16 @@ namespace Benkyo.Controllers
                 // Implement login logic using _firebaseService
                 // For example, verify user credentials and generate a token
                 // Placeholder response
-                var response = new Shared.Models.User
+                var userToBePassed = new Shared.Models.User
                 {
-                    Token = "sample_token",
+                    Token = user.User.Credential.IdToken,
                     Expiration = DateTime.UtcNow.AddHours(1),
-                    Email = request.Email
+                    Email = request.Email,
+                    Name = request.Name,
+                    Role = request.Role ?? "user",
                 };
+
+                await _authService.AuthenticateUser(userToBePassed);
 
                 return Ok(new {Message = "You're Here"});
 
