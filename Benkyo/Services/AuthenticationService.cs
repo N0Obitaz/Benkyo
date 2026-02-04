@@ -41,7 +41,7 @@ namespace Benkyo.Services
                 var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
 
 
-                
+                await _http.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal, authProperties);
             }
             catch (Exception ex)
             {
