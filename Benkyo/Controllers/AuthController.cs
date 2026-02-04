@@ -16,12 +16,14 @@ namespace Benkyo.Controllers
         private readonly FirebaseService _firebaseService;
         private readonly FirebaseAuthentication _firebaseAuth;
         private readonly FirebaseAuthClient client;
+        private readonly AuthenticationService _authService;
 
-        public AuthController(FirebaseService firebaseService,FirebaseAuthentication firebaseAuth)
+        public AuthController(FirebaseService firebaseService,FirebaseAuthentication firebaseAuth, AuthenticationService authService)
         {
             _firebaseAuth = firebaseAuth;
             _firebaseService = firebaseService;
             client = new FirebaseAuthClient(_firebaseAuth.Config);
+            _authService = authService;
         }
 
         [HttpPost("login")] 
@@ -47,6 +49,7 @@ namespace Benkyo.Controllers
                     Expiration = DateTime.UtcNow.AddHours(1),
                     Email = request.Email
                 };
+
                 return Ok(new {Message = "You're Here"});
 
             } catch( Exception ex)
