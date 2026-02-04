@@ -1,4 +1,5 @@
-﻿using FirebaseAdmin.Auth;
+﻿using System.Security.Claims;
+using FirebaseAdmin.Auth;
 using Shared.Models;
 
 namespace Benkyo.Services
@@ -11,7 +12,10 @@ namespace Benkyo.Services
 
             try
             {
+                if (user is null) return;
                 FirebaseToken decodedToken = await FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(user.Token);
+
+               
 
             }
             catch (Exception ex)
