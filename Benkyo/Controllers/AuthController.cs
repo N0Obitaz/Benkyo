@@ -54,7 +54,7 @@ namespace Benkyo.Controllers
 
                 await _authService.AuthenticateUser(userToBePassed);
 
-                return Ok(new {Message = "You're Here"});
+                return Ok(new {Message = "You have Successfully Logged on"});
 
             } catch( Exception ex)
             {
